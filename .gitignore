@@ -1,1 +1,6 @@
 /.idea/
+/.env
+/.env.*
+!/.env.example
+/meiancloud/.env
+!/meiancloud/.env.example

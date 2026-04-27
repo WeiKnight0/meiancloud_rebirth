@@ -59,6 +59,70 @@ pip3 install -r requirements.txt
 # Start the service
 python3 manage.py runserver
 ```
+
+## Environment Variables
+The project now keeps runtime configuration in `meiancloud/.env`.
+
+Important variables:
+
+- `DJANGO_SECRET_KEY`: Django secret key
+- `DJANGO_DEBUG`: whether Django runs in debug mode
+- `DJANGO_ALLOWED_HOSTS`: allowed hosts, separated by commas
+- `DB_ENGINE`: database backend, default is MySQL
+- `DB_NAME`: database name
+- `DB_USER`: database user
+- `DB_PASSWORD`: database password
+- `DB_HOST`: database host
+- `DB_PORT`: database port
+
+Before first run, copy the example file and adjust the values:
+
+```shell
+cd ./meiancloud
+cp .env.example .env
+```
+
+Notes:
+
+- `meiancloud/.env` is for local and deployment configuration and should not be committed with real secrets.
+- `meiancloud/.env.example` is the template for other developers.
+
+## Docker
+Docker-related files are now under `meiancloud/`:
+
+- `meiancloud/docker-compose.yml`: base configuration, closer to production
+- `meiancloud/docker-compose.override.yml`: development overrides
+- `meiancloud/Dockerfile`
+- `meiancloud/nginx.conf`
+
+Development startup:
+
+```shell
+cd ./meiancloud
+cp .env.example .env
+docker compose up --build
+```
+
+This starts:
+
+- `mysql`
+- `django` with `runserver`
+- `nginx`
+
+Default access points in development:
+
+- Website: `http://localhost`
+- Django directly: `http://localhost:8000`
+- MySQL: `127.0.0.1:3306`
+
+Production-style startup using only the base file:
+
+```shell
+cd ./meiancloud
+docker compose -f docker-compose.yml up --build -d
+```
+
+In this mode, Django runs with `gunicorn`, and only Nginx is exposed externally.
 ---
 
 ## Developers

@@ -65,6 +65,70 @@ pip3 install -r requirements.txt
 # 启动服务
 python3 manage.py runserver
 ```  
+
+## 环境变量
+项目当前将运行配置集中放在 `meiancloud/.env` 中。
+
+主要字段说明：
+
+- `DJANGO_SECRET_KEY`：Django 密钥
+- `DJANGO_DEBUG`：是否开启调试模式
+- `DJANGO_ALLOWED_HOSTS`：允许访问的域名或主机，使用逗号分隔
+- `DB_ENGINE`：数据库后端，默认使用 MySQL
+- `DB_NAME`：数据库名
+- `DB_USER`：数据库用户名
+- `DB_PASSWORD`：数据库密码
+- `DB_HOST`：数据库主机
+- `DB_PORT`：数据库端口
+
+首次使用前，先复制示例文件并按需修改：
+
+```shell
+cd ./meiancloud
+cp .env.example .env
+```
+
+说明：
+
+- `meiancloud/.env` 用于本地和部署配置，不应提交真实密钥和密码。
+- `meiancloud/.env.example` 是给其他开发者参考的模板文件。
+
+## Docker 启动
+Docker 相关文件现已统一放在 `meiancloud/` 目录下：
+
+- `meiancloud/docker-compose.yml`：基础配置，偏生产风格
+- `meiancloud/docker-compose.override.yml`：开发环境覆盖配置
+- `meiancloud/Dockerfile`
+- `meiancloud/nginx.conf`
+
+开发环境启动：
+
+```shell
+cd ./meiancloud
+cp .env.example .env
+docker compose up --build
+```
+
+该命令会启动：
+
+- `mysql`
+- 使用 `runserver` 的 `django`
+- `nginx`
+
+开发环境默认访问地址：
+
+- 网站：`http://localhost`
+- Django 直连：`http://localhost:8000`
+- MySQL：`127.0.0.1:3306`
+
+如果希望以更接近生产环境的方式启动，仅使用基础配置：
+
+```shell
+cd ./meiancloud
+docker compose -f docker-compose.yml up --build -d
+```
+
+此时 Django 将通过 `gunicorn` 运行，对外仅暴露 Nginx。
 ---
 ## 开发人员
 感谢梅庵云迹实践团全体人员的努力与付出。
