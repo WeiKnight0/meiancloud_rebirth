@@ -1,156 +1,190 @@
-# Meian Cloud Website Project
-[**简体中文**](README.zh-cn.md) | [English](#)   
-*(If you prefer Chinese, see [README.zh-cn.md](README.zh-CN.md).)*
-## Project Introduction
-"Meian Cloud" is a website planned and implemented by the 梅庵云迹实践团, which showcases the historical culture of Meian in Southeast University through digital means. By combining front - end and back - end technologies, the project realizes functions such as Meian culture display, user interaction, and comment management, aiming to let more people understand the historical heritage and unique charm of Meian.
+# Meian Cloud Rebirth Project Guide
+[**简体中文**](README.zh-cn.md) | [English](#)
 
----
+Developer-facing documentation for the Meian Cloud Rebirth repository. The website itself still uses the historical project name "Meian Cloud". This repository is a reset and continuation of the original [`r1Way/meiancloud`](https://github.com/r1Way/meiancloud) project. The current repository is [`WeiKnight0/meiancloud_rebirth`](https://github.com/WeiKnight0/meiancloud_rebirth). For a website-oriented introduction, see [intro/README.md](intro/README.md).
 
-## Technology Stack
-### Front - end
-- **Core Technologies**: HTML5, CSS3, JavaScript
-- **Animation Effects**: Fade - in and fade - out page transitions, dynamic component interactions
-- **Design Style**: Unified color scheme, responsive layout
+## Overview
+Meian Cloud is a Django-based website project built to present the history, culture, and educational significance of Meian at Southeast University in digital form. This repository contains the reset codebase, deployment configuration, and supporting assets maintained for continued development.
 
-### Back - end
-- **Framework**: Django 4.2 + Python 3.11
-- **Function Implementation**: User authentication, comment management, dynamic template rendering
-- **Database**: MySQL
+![Project Preview](figs/home-page.png)
 
----
+## Repository
+- Original project: [https://github.com/r1Way/meiancloud](https://github.com/r1Way/meiancloud)
+- Current reset version: [https://github.com/WeiKnight0/meiancloud_rebirth](https://github.com/WeiKnight0/meiancloud_rebirth)
+- Intro docs: [intro/README.md](intro/README.md)
 
-## Function Module Introduction
-1. **Home Page**  
-The "Home Page" mainly introduces the core information of Meian. The carousel displays pictures of Meian and the team flag in a loop, showing the appearance of Meian and our team's practice journey. The text part comprehensively and briefly introduces Meian from multiple perspectives, including its historical culture, its special status as the venue of the Second National Congress of the Communist Youth League of China, and its influence and significance on future generations.
-![Home Page](figs/main.png)
+## Project Lineage
+- Website name: `Meian Cloud`
+- Current code repository name: `meiancloud_rebirth`
+- Relationship: this repository is the reset and continued development branch of the original project
 
-2. **Tracing Meian**  
-The "Tracing Meian" section focuses on displaying the exhibits and related introductions in the five exhibition halls inside Meian. Each exhibition hall's introduction is accompanied by selected photos taken by our team, providing visitors with an immersive visiting experience. To facilitate visitors to quickly find the introductions of various locations in Meian, this section also features an overview map of Meian. Visitors can simply click on the corresponding location to jump to the detailed introduction page of the corresponding exhibition hall, greatly enhancing the browsing convenience.
-![Tracing Meian](figs/xjma.png)
+## Tech Stack
+- Backend: Django 4.2, Python 3.11
+- Frontend: Django Templates, HTML5, CSS3, JavaScript
+- Database: SQLite by default, MySQL supported
+- Deployment: Docker Compose, Gunicorn, Nginx
+- Media handling: Pillow
+- AI integration: Tencent Cloud SSE-based chat interface
 
-3. **Free Discussion**  
-The "Free Discussion" section is the interactive comment area of the website. After logging in, users can put forward suggestions, questions, or express their opinions. Meanwhile, our team and other users can reply to the comments, realizing two - way information exchange. This function not only enhances user participation but also provides a user feedback channel for the continuous optimization of the website.
-![Free Discussion](figs/csyy.png)
+## Architecture
+The project uses a classic Django monolith structure with separate apps for page content, accounts, community interaction, and AI services.
 
-4. **Frequently Asked Questions**  
-The "Frequently Asked Questions" section answers common questions that users may ask, covering aspects such as historical details, visiting guides, and cultural values of Meian. By sorting out and answering these questions in advance, it can effectively improve the user experience and reduce the confusion that users may encounter during browsing.
-![Frequently Asked Questions](figs/cjwt.png)
+Request flow in deployment mode:
 
-5. **About Us**  
-The "About Us" section mainly introduces the overview of the development team, the development background, technical architecture, and subsequent development plans of the website. Through this section, users can have a more comprehensive understanding of the website's production team and operation concept, enhancing users' trust in the website.
-![About Us](figs/about.png)
+```text
+Browser
+  -> Nginx
+  -> Django (Gunicorn or runserver)
+  -> SQLite or MySQL
+```
 
-6. **User System**  
-With the user system, users can register and log in. After logging in, users can set their avatars, modify personal information (such as gender, birthday, personal signature, etc.), and change passwords, greatly improving the user experience.
+## Project Components
+- `meiancloud/core`: public content pages such as the homepage, Meian exhibition guide, FAQ, and about page
+- `meiancloud/accounts`: registration, login, profile editing, password changes, and account deletion
+- `meiancloud/community`: discussion area, replies, comment review, and moderation
+- `meiancloud/ai`: chat API endpoint and Tencent Cloud AI integration
+- `meiancloud/mysite`: Django project settings, root URLs, and WSGI/ASGI entrypoints
+- `figs/`: README images and preview assets
+- `intro/`: website-oriented bilingual introduction documents
 
----
+## Directory Layout
+```text
+.
+├── figs/
+├── intro/
+├── README.md
+├── README.zh-cn.md
+└── meiancloud/
+    ├── accounts/
+    ├── ai/
+    ├── community/
+    ├── core/
+    ├── mysite/
+    ├── Dockerfile
+    ├── docker-compose.yml
+    ├── docker-compose.override.yml
+    ├── nginx.conf
+    ├── requirements.txt
+    └── manage.py
+```
 
-## Access Methods
-- **Online Address**: [https://www.meiancloud.site](https://www.meiancloud.site)
-- **Local Deployment**:
+## Core Modules
+### `core`
+- Routes public pages such as `/`, `/findmeian/`, `/about/`, and `/question/`
+- Renders template-based content pages
+- Provides shared request context for templates
+
+### `accounts`
+- Uses Django's built-in auth system
+- Extends user information through `UserProfile`
+- Supports avatar upload, profile editing, password changes, and account deletion
+- Includes `ensure_admin_user`, which creates or updates a default admin account from environment variables
+
+### `community`
+- Stores top-level comments and replies in a single `Comment` model
+- Exposes a public discussion page and a superuser moderation page
+- Supports approval-based visibility for comments
+
+### `ai`
+- Exposes `POST /api/chat/`
+- Forwards user messages to Tencent Cloud's streaming chat service
+- Returns the final generated reply as JSON
+
+## Local Development
+Prerequisites:
+- Python 3.11
+- `pip`
+
+Setup:
+
 ```shell
-# First, make sure Python 3.11 is installed
-# Clone the repository
-git clone https://github.com/r1Way/meiancloud
-# Navigate to the project directory
-cd ./meiancloud/meiancloud
-# Install dependencies
+git clone https://github.com/WeiKnight0/meiancloud_rebirth
+cd meiancloud/meiancloud
+cp .env.example .env
 pip3 install -r requirements.txt
-# Start the service
+python3 manage.py migrate
+python3 manage.py ensure_admin_user
 python3 manage.py runserver
 ```
 
+Default local access:
+- Website: `http://127.0.0.1:8000`
+- Admin: `http://127.0.0.1:8000/admin/`
+
 ## Environment Variables
-The project now keeps runtime configuration in `meiancloud/.env`.
+Runtime configuration is stored in `meiancloud/.env`.
 
 Important variables:
-
 - `DJANGO_SECRET_KEY`: Django secret key
-- `DJANGO_DEBUG`: whether Django runs in debug mode
-- `DJANGO_ALLOWED_HOSTS`: allowed hosts, separated by commas
-- `DB_ENGINE`: database backend, `sqlite3` for local testing by default
-- `DB_NAME`: database name
-- `DB_USER`: database user
+- `DJANGO_DEBUG`: whether debug mode is enabled
+- `DJANGO_ALLOWED_HOSTS`: comma-separated allowed hosts
+- `DB_ENGINE`: database backend
+- `DB_NAME`: database name or SQLite file name
+- `DB_USER`: database username
 - `DB_PASSWORD`: database password
 - `DB_HOST`: database host
 - `DB_PORT`: database port
 - `ADMIN_USERNAME`: default admin username
 - `ADMIN_PASSWORD`: default admin password
 - `ADMIN_EMAIL`: default admin email
-- `MYSQL_ROOT_PASSWORD`: MySQL root password for Docker MySQL service
-- `MYSQL_DATABASE`: MySQL database name for Docker MySQL service
-- `MYSQL_USER`: MySQL username for Docker MySQL service
-- `MYSQL_PASSWORD`: MySQL password for Docker MySQL service
-
-Before first run, copy the example file and adjust the values:
-
-```shell
-cd ./meiancloud
-cp .env.example .env
-```
+- `MYSQL_ROOT_PASSWORD`: MySQL root password for Docker
+- `MYSQL_DATABASE`: MySQL database name for Docker
+- `MYSQL_USER`: MySQL user for Docker
+- `MYSQL_PASSWORD`: MySQL password for Docker
 
 Notes:
+- `meiancloud/.env.example` defaults to SQLite so local setup works immediately
+- `meiancloud/.env` should not contain real secrets in version control
+- the startup commands used in Docker also run migrations, collect static files, and ensure the admin account exists
 
-- `meiancloud/.env` is for local and deployment configuration and should not be committed with real secrets.
-- `meiancloud/.env.example` is the template for other developers.
-- The default `meiancloud/.env.example` uses SQLite so local testing works without switching Django to MySQL first.
-- The startup command automatically creates or updates an admin user from the environment variables.
-
-Default test admin account from `.env.example`:
-
+Default admin account in `.env.example`:
 - Username: `admin`
 - Password: `123456`
 
-## Docker
-Docker-related files are now under `meiancloud/`:
+## Docker Deployment
+Docker-related files are in `meiancloud/`:
+- `docker-compose.yml`: base configuration, closer to production
+- `docker-compose.override.yml`: development overrides
+- `Dockerfile`: Django image build
+- `nginx.conf`: reverse proxy and static/media serving
 
-- `meiancloud/docker-compose.yml`: base configuration, closer to production
-- `meiancloud/docker-compose.override.yml`: development overrides
-- `meiancloud/Dockerfile`
-- `meiancloud/nginx.conf`
-
-Development startup:
+Development mode:
 
 ```shell
-cd ./meiancloud
+cd meiancloud
 cp .env.example .env
 docker compose up --build
 ```
 
 This starts:
-
 - `mysql`
 - `django` with `runserver`
 - `nginx`
 
-By default, Django uses SQLite in development because `.env.example` sets:
+Default development access points:
+- Website: `http://localhost`
+- Django directly: `http://localhost:8000`
+- MySQL: `127.0.0.1:3307`
+- Admin: `http://localhost/admin/`
+
+Production-style startup:
+
+```shell
+cd meiancloud
+docker compose -f docker-compose.yml up --build -d
+```
+
+In this mode, Django runs with Gunicorn and only Nginx is exposed externally.
+
+## Switching to MySQL
+The default `.env.example` uses SQLite:
 
 ```env
 DB_ENGINE=django.db.backends.sqlite3
 DB_NAME=db.sqlite3
 ```
 
-The MySQL container can still start, but Django will not use it unless you switch the database settings.
-
-Default access points in development:
-
-- Website: `http://localhost`
-- Django directly: `http://localhost:8000`
-- MySQL: `127.0.0.1:3307`
-- Admin: `http://localhost/admin/`
-- Default admin account: `admin / 123456`
-
-Production-style startup using only the base file:
-
-```shell
-cd ./meiancloud
-docker compose -f docker-compose.yml up --build -d
-```
-
-In this mode, Django runs with `gunicorn`, and only Nginx is exposed externally.
-
-## Switching To MySQL In Production
-To switch Django from SQLite to MySQL, update `meiancloud/.env` like this:
+To switch Django to MySQL, update `meiancloud/.env`:
 
 ```env
 DB_ENGINE=django.db.backends.mysql
@@ -161,7 +195,7 @@ DB_HOST=mysql
 DB_PORT=3306
 ```
 
-If you use the bundled Docker MySQL service, also keep these values aligned:
+If you use the bundled MySQL container, keep these aligned as well:
 
 ```env
 MYSQL_ROOT_PASSWORD=123456
@@ -170,90 +204,48 @@ MYSQL_USER=meianclouddata
 MYSQL_PASSWORD=SRZyhMDrMrCaWdpA
 ```
 
-After changing the database backend, recreate the containers and rerun migrations.
----
+After switching the database backend, recreate containers and rerun migrations.
 
-## Developers
-Thanks to all the members of the 梅庵云迹实践团 for their efforts and contributions.
+## Development Notes
+- Templates and static assets are organized by app
+- `STATIC_ROOT` is `meiancloud/staticfiles`
+- `MEDIA_ROOT` is `meiancloud/media`
+- `mysite/urls.py` mounts all application routes at the root level
+- superuser-only moderation is implemented in `community/comment-management/`
+- the AI service currently depends on a configured Tencent Cloud bot key in code
 
-Special thanks to the following core developers for their contributions:
+## Contributors
+Thanks to all members of the Meian Cloud practice team.
+
+Core contributors:
 
 <table>
   <tr>
     <td align="center">
       <a href="https://github.com/r1Way">
-        <img src="https://avatars.githubusercontent.com/r1Way" width="100px;" alt="Developer 1's avatar"/>
+        <img src="https://avatars.githubusercontent.com/r1Way" width="100px;" alt="r1Way avatar"/>
         <br />
         <sub><b>r1Way (Team Leader)</b></sub>
       </a>
     </td>
     <td align="center">
       <a href="https://github.com/WeiKnight0">
-        <img src="https://avatars.githubusercontent.com/weiknight0" width="100px;" alt="Developer 2's avatar"/>
+        <img src="https://avatars.githubusercontent.com/weiknight0" width="100px;" alt="WeiKnight avatar"/>
         <br />
-        <sub><b>WeiKnight</b></sub>
+        <sub><b>WeiKnight (Core Developer)</b></sub>
       </a>
     </td>
   </tr>
 </table>
 
-Thanks to their day - and - night coding, debugging, and optimization, this project has been realized!
+## Copyright
+- Historical materials related to Meian belong to Southeast University
+- The website project is maintained by the Meian Cloud practice team
+- The code license is MIT
+- Image sources should be credited when required
 
-⭐ **If this project is helpful to you, please give us a Star!** ⭐
-
-Your support is our greatest motivation for continuous improvement. [[Project Address]](https://github.com/r1Way/meiancloud)
-
-
----
-
-## Copyright Statement
-- The copyright of Meian's historical materials belongs to Southeast University.
-- The ownership of the website belongs to the 梅庵云迹实践团.
-- The open - source license for the website code is the MIT License.
-- The source of image materials should be indicated.
-
----
----
-# Appendix: Website Building Experience Sharing (Chinese Only)
-<!-- 
-# Meian Cloud Website
-
-[Website link www.meiancloud.site](https://meiancloud.site/)
-
-## Project Address
-
-[r1Way/meian_web: meiancloud](https://github.com/r1Way/meian_web) -->
-
-## Front - end Basics
-
-html+css+js
-
-[全网首发AI+JavaWeb开发入门，Tlias教学管理系统项目实战全套视频教程，从需求分析、设计、前后端开发、测试、程序优化到项目部署一套搞定](https://www.bilibili.com/video/BV1yGydYEE3H?vd_source=ec4e4974e1b56ed330afdb6c6ead1501)
-
-> 帮助文档参考 [MDN Web Docs](https://developer.mozilla.org/zh-CN/)  
-
-## Website Online Process
-
-[【合集完结】想上线网站？通俗易懂的网站上线部署发布教程 | 个人网站如何托管建站 | 服务器 IP DNS CDN 备案 工作原理 | 腾讯云开发静态网站托管](https://www.bilibili.com/video/BV18a4y1Y7e9?p=6&vd_source=ec4e4974e1b56ed330afdb6c6ead1501)
-
-## Tencent Cloud Deployment Documentation
-
-[域名注册购买_域名注册选购 - 腾讯云](https://buy.cloud.tencent.com/domain)
-
-[域名注册 单个域名注册-注册新域名-文档中心-腾讯云](https://cloud.tencent.com/document/product/242/9595)
-
-[ICP 备案 如何快速备案您的网站或 APP-快速入门-文档中心-腾讯云](https://cloud.tencent.com/document/product/243/39038)
-
-[我的备案 - ICP备案 - 控制台](https://console.cloud.tencent.com/beian/manage/material)
-
-[轻量应用服务器 安装和配置宝塔 Linux 面板腾讯云专享版-实践教程-文档中心-腾讯云](https://cloud.tencent.com/document/product/1207/54078)
-
-## Django Framework
-
-This framework is used to build the back - end.
-
->  [Python-Django手把手从零开发个人博客](https://www.bilibili.com/video/BV1iU4y1A7MH?vd_source=ec4e4974e1b56ed330afdb6c6ead1501)
-
-Getting Started
-
->  [编写你的第一个 Django 应用，第 1 部分 | Django 文档 | Django](https://docs.djangoproject.com/zh-hans/5.1/intro/tutorial01/)
+## References
+- Django docs: [https://docs.djangoproject.com/](https://docs.djangoproject.com/)
+- MDN Web Docs: [https://developer.mozilla.org/](https://developer.mozilla.org/)
+- Original repository: [https://github.com/r1Way/meiancloud](https://github.com/r1Way/meiancloud)
+- Current repository: [https://github.com/WeiKnight0/meiancloud_rebirth](https://github.com/WeiKnight0/meiancloud_rebirth)
