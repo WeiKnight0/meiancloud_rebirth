@@ -1,10 +1,11 @@
 Django==4.2
 Pillow==11.1.0
+PyMySQL==1.1.1
 bidict==0.23.1
 certifi==2024.2.2
 charset-normalizer==3.3.2
+cryptography==45.0.4
 h11==0.14.0
-netifaces==0.10.6
 python-engineio==4.9.0
 python-socketio==5.11.4
 requests==2.31.0

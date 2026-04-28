@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "home.apps.HomeConfig",
+    "accounts.apps.AccountsConfig",
+    "ai.apps.AiConfig",
+    "community.apps.CommunityConfig",
+    "core.apps.CoreConfig",
 ]
 
 MIDDLEWARE = [
@@ -89,16 +92,31 @@ CSRF_TRUSTED_ORIGINS = [
 #     }
 # }
 
-DATABASES = {
-    "default": {
-        "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.mysql"),
-        "NAME": os.getenv("DB_NAME", "meianclouddata"),
-        "USER": os.getenv("DB_USER", "meianclouddata"),
-        "PASSWORD": os.getenv("DB_PASSWORD", "SRZyhMDrMrCaWdpA"),
-        "HOST": os.getenv("DB_HOST", "localhost"),
-        "PORT": os.getenv("DB_PORT", "3306"),
+DB_ENGINE = os.getenv("DB_ENGINE", "django.db.backends.sqlite3")
+DB_NAME = os.getenv("DB_NAME", "db.sqlite3")
+
+if DB_ENGINE == "django.db.backends.sqlite3":
+    if os.path.isabs(DB_NAME):
+        db_name = DB_NAME
+    else:
+        db_name = str(BASE_DIR / DB_NAME)
+    DATABASES = {
+        "default": {
+            "ENGINE": DB_ENGINE,
+            "NAME": db_name,
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": DB_ENGINE,
+            "NAME": DB_NAME,
+            "USER": os.getenv("DB_USER", "meianclouddata"),
+            "PASSWORD": os.getenv("DB_PASSWORD", "SRZyhMDrMrCaWdpA"),
+            "HOST": os.getenv("DB_HOST", "localhost"),
+            "PORT": os.getenv("DB_PORT", "3306"),
+        }
+    }
 
 
 # Password validation
@@ -136,9 +154,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [
-    BASE_DIR / "home/static",
-]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # 设置会话在30分钟（1800秒）不活动后过期

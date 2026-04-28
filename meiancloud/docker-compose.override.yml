@@ -1,13 +1,13 @@
 services:
   mysql:
     ports:
-      - "3306:3306"
+      - "3307:3306"
 
   django:
     environment:
       DJANGO_DEBUG: ${DJANGO_DEBUG:-True}
     working_dir: /app
-    command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python manage.py migrate && python manage.py ensure_admin_user && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     volumes:

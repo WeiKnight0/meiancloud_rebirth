@@ -74,12 +74,19 @@ python3 manage.py runserver
 - `DJANGO_SECRET_KEY`：Django 密钥
 - `DJANGO_DEBUG`：是否开启调试模式
 - `DJANGO_ALLOWED_HOSTS`：允许访问的域名或主机，使用逗号分隔
-- `DB_ENGINE`：数据库后端，默认使用 MySQL
+- `DB_ENGINE`：数据库后端，本地测试默认使用 `sqlite3`
 - `DB_NAME`：数据库名
 - `DB_USER`：数据库用户名
 - `DB_PASSWORD`：数据库密码
 - `DB_HOST`：数据库主机
 - `DB_PORT`：数据库端口
+- `ADMIN_USERNAME`：默认管理员用户名
+- `ADMIN_PASSWORD`：默认管理员密码
+- `ADMIN_EMAIL`：默认管理员邮箱
+- `MYSQL_ROOT_PASSWORD`：Docker 中 MySQL root 密码
+- `MYSQL_DATABASE`：Docker 中 MySQL 数据库名
+- `MYSQL_USER`：Docker 中 MySQL 用户名
+- `MYSQL_PASSWORD`：Docker 中 MySQL 密码
 
 首次使用前，先复制示例文件并按需修改：
 
@@ -92,6 +99,13 @@ cp .env.example .env
 
 - `meiancloud/.env` 用于本地和部署配置，不应提交真实密钥和密码。
 - `meiancloud/.env.example` 是给其他开发者参考的模板文件。
+- 默认的 `meiancloud/.env.example` 使用 SQLite，便于本地直接测试。
+- 启动命令会根据环境变量自动创建或更新管理员账号。
+
+`.env.example` 默认测试管理员账号：
+
+- 用户名：`admin`
+- 密码：`123456`
 
 ## Docker 启动
 Docker 相关文件现已统一放在 `meiancloud/` 目录下：
@@ -115,11 +129,22 @@ docker compose up --build
 - 使用 `runserver` 的 `django`
 - `nginx`
 
+默认情况下，Django 在开发环境会使用 SQLite，因为 `.env.example` 中配置为：
+
+```env
+DB_ENGINE=django.db.backends.sqlite3
+DB_NAME=db.sqlite3
+```
+
+即使 MySQL 容器也会启动，Django 仍不会使用 MySQL，除非你手动切换数据库配置。
+
 开发环境默认访问地址：
 
 - 网站：`http://localhost`
 - Django 直连：`http://localhost:8000`
-- MySQL：`127.0.0.1:3306`
+- MySQL：`127.0.0.1:3307`
+- 后台管理：`http://localhost/admin/`
+- 默认管理员账号：`admin / 123456`
 
 如果希望以更接近生产环境的方式启动，仅使用基础配置：
 
@@ -129,6 +154,29 @@ docker compose -f docker-compose.yml up --build -d
 ```
 
 此时 Django 将通过 `gunicorn` 运行，对外仅暴露 Nginx。
+
+## 生产环境切换到 MySQL
+如果要让 Django 从 SQLite 切换到 MySQL，请修改 `meiancloud/.env` 中这些字段：
+
+```env
+DB_ENGINE=django.db.backends.mysql
+DB_NAME=meianclouddata
+DB_USER=meianclouddata
+DB_PASSWORD=SRZyhMDrMrCaWdpA
+DB_HOST=mysql
+DB_PORT=3306
+```
+
+如果你使用项目自带的 Docker MySQL 服务，还要保持这些值一致：
+
+```env
+MYSQL_ROOT_PASSWORD=123456
+MYSQL_DATABASE=meianclouddata
+MYSQL_USER=meianclouddata
+MYSQL_PASSWORD=SRZyhMDrMrCaWdpA
+```
+
+切换数据库后，建议重新创建容器并重新执行迁移。
 ---
 ## 开发人员
 感谢梅庵云迹实践团全体人员的努力与付出。

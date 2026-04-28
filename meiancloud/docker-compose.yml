@@ -4,14 +4,14 @@ services:
     container_name: meiancloud_mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: ${DB_NAME:-meianclouddata}
-      MYSQL_USER: ${DB_USER:-meianclouddata}
-      MYSQL_PASSWORD: ${DB_PASSWORD:-SRZyhMDrMrCaWdpA}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-123456}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-meianclouddata}
+      MYSQL_USER: ${MYSQL_USER:-meianclouddata}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-SRZyhMDrMrCaWdpA}
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p123456"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-123456}"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -30,13 +30,16 @@ services:
       DJANGO_DEBUG: ${DJANGO_DEBUG:-False}
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-*}
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-django-insecure-change-me}
-      DB_ENGINE: ${DB_ENGINE:-django.db.backends.mysql}
-      DB_NAME: ${DB_NAME:-meianclouddata}
+      DB_ENGINE: ${DB_ENGINE:-django.db.backends.sqlite3}
+      DB_NAME: ${DB_NAME:-db.sqlite3}
       DB_USER: ${DB_USER:-meianclouddata}
       DB_PASSWORD: ${DB_PASSWORD:-SRZyhMDrMrCaWdpA}
       DB_HOST: ${DB_HOST:-mysql}
       DB_PORT: ${DB_PORT:-3306}
-    command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn mysite.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 2"
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-123456}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
+    command: sh -c "python manage.py migrate && python manage.py ensure_admin_user && python manage.py collectstatic --noinput && gunicorn mysite.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 2"
     volumes:
       - static_data:/app/staticfiles
       - media_data:/app/media

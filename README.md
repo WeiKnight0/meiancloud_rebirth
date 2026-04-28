@@ -68,12 +68,19 @@ Important variables:
 - `DJANGO_SECRET_KEY`: Django secret key
 - `DJANGO_DEBUG`: whether Django runs in debug mode
 - `DJANGO_ALLOWED_HOSTS`: allowed hosts, separated by commas
-- `DB_ENGINE`: database backend, default is MySQL
+- `DB_ENGINE`: database backend, `sqlite3` for local testing by default
 - `DB_NAME`: database name
 - `DB_USER`: database user
 - `DB_PASSWORD`: database password
 - `DB_HOST`: database host
 - `DB_PORT`: database port
+- `ADMIN_USERNAME`: default admin username
+- `ADMIN_PASSWORD`: default admin password
+- `ADMIN_EMAIL`: default admin email
+- `MYSQL_ROOT_PASSWORD`: MySQL root password for Docker MySQL service
+- `MYSQL_DATABASE`: MySQL database name for Docker MySQL service
+- `MYSQL_USER`: MySQL username for Docker MySQL service
+- `MYSQL_PASSWORD`: MySQL password for Docker MySQL service
 
 Before first run, copy the example file and adjust the values:
 
@@ -86,6 +93,13 @@ Notes:
 
 - `meiancloud/.env` is for local and deployment configuration and should not be committed with real secrets.
 - `meiancloud/.env.example` is the template for other developers.
+- The default `meiancloud/.env.example` uses SQLite so local testing works without switching Django to MySQL first.
+- The startup command automatically creates or updates an admin user from the environment variables.
+
+Default test admin account from `.env.example`:
+
+- Username: `admin`
+- Password: `123456`
 
 ## Docker
 Docker-related files are now under `meiancloud/`:
@@ -109,11 +123,22 @@ This starts:
 - `django` with `runserver`
 - `nginx`
 
+By default, Django uses SQLite in development because `.env.example` sets:
+
+```env
+DB_ENGINE=django.db.backends.sqlite3
+DB_NAME=db.sqlite3
+```
+
+The MySQL container can still start, but Django will not use it unless you switch the database settings.
+
 Default access points in development:
 
 - Website: `http://localhost`
 - Django directly: `http://localhost:8000`
-- MySQL: `127.0.0.1:3306`
+- MySQL: `127.0.0.1:3307`
+- Admin: `http://localhost/admin/`
+- Default admin account: `admin / 123456`
 
 Production-style startup using only the base file:
 
@@ -123,6 +148,29 @@ docker compose -f docker-compose.yml up --build -d
 ```
 
 In this mode, Django runs with `gunicorn`, and only Nginx is exposed externally.
+
+## Switching To MySQL In Production
+To switch Django from SQLite to MySQL, update `meiancloud/.env` like this:
+
+```env
+DB_ENGINE=django.db.backends.mysql
+DB_NAME=meianclouddata
+DB_USER=meianclouddata
+DB_PASSWORD=SRZyhMDrMrCaWdpA
+DB_HOST=mysql
+DB_PORT=3306
+```
+
+If you use the bundled Docker MySQL service, also keep these values aligned:
+
+```env
+MYSQL_ROOT_PASSWORD=123456
+MYSQL_DATABASE=meianclouddata
+MYSQL_USER=meianclouddata
+MYSQL_PASSWORD=SRZyhMDrMrCaWdpA
+```
+
+After changing the database backend, recreate the containers and rerun migrations.
 ---
 
 ## Developers

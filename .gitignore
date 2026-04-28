@@ -4,3 +4,16 @@
 !/.env.example
 /meiancloud/.env
 !/meiancloud/.env.example
+
+.DS_Store
+node_modules/
+dist/
+
+*.py[oc]
+__pycache__/
+*.pid
+/meiancloud/media/
+/meiancloud/staticfiles/
+
+*.db
+*.sqlite3
