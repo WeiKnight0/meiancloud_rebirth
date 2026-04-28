@@ -53,7 +53,7 @@
                 {% if user.is_superuser %}
                 用户：ADMIN
                 {% else %}
-                <img src="{{ userprofile.image.url }}" alt="头像" id="avatar">
+                <img src="{{ userprofile.avatar_url }}" alt="头像" id="avatar">
                 {% endif %}
             </a>
             {% else %}

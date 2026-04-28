@@ -1,0 +1,34 @@
+{
+  "name": "meiancloud-rebirth",
+  "build": {
+    "context": "../meiancloud",
+    "dockerfile": "../meiancloud/Dockerfile"
+  },
+  "workspaceFolder": "/workspace/meiancloud_rebirth",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace/meiancloud_rebirth,type=bind,consistency=cached",
+  "forwardPorts": [8000],
+  "remoteEnv": {
+    "PYTHONPATH": "/workspace/meiancloud_rebirth/meiancloud",
+    "DJANGO_SETTINGS_MODULE": "mysite.settings"
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.terminal.activateEnvironment": false,
+        "python.analysis.extraPaths": [
+          "/workspace/meiancloud_rebirth/meiancloud"
+        ],
+        "python.envFile": "/workspace/meiancloud_rebirth/meiancloud/.env",
+        "terminal.integrated.cwd": "/workspace/meiancloud_rebirth/meiancloud"
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-azuretools.vscode-docker",
+        "batisteo.vscode-django"
+      ]
+    }
+  },
+  "postCreateCommand": "sh -c 'if [ ! -f /workspace/meiancloud_rebirth/meiancloud/.env ]; then cp /workspace/meiancloud_rebirth/meiancloud/.env.example /workspace/meiancloud_rebirth/meiancloud/.env; fi && pip install --no-cache-dir -r /workspace/meiancloud_rebirth/meiancloud/requirements.txt'"
+}

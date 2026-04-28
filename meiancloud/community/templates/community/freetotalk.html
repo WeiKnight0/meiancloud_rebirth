@@ -42,7 +42,7 @@
                 <div class="comment-header">
                     <div class="comment-author">
                         <a href="{% url 'accounts:userprofile' userid=comment.owner.owner.id%}" style="text-decoration: none;">
-                            <img src="{{comment.owner.image.url}}" alt="avatar" class="comment-avatar">
+                            <img src="{{ comment.owner.avatar_url }}" alt="avatar" class="comment-avatar">
                         </a>
                         <a href="{% url 'accounts:userprofile' userid=comment.owner.owner.id%}" class="comment-nick">{{ comment.owner.nick_name }}</a>
                     </div>
@@ -65,7 +65,7 @@
                     <div class="reply-item">
                         <div class="reply-author">
                             <a href="{% url 'accounts:userprofile' userid=reply.owner.owner.id%}" style="text-decoration: none;">
-                                <img src="{{reply.owner.image.url}}" alt="avatar" class="reply-avatar">
+                                <img src="{{ reply.owner.avatar_url }}" alt="avatar" class="reply-avatar">
                             </a>
                             <a href="{% url 'accounts:userprofile' userid=reply.owner.owner.id%}" class="reply-nick"><b>{{ reply.owner.nick_name }}</b></a>
                         </div>

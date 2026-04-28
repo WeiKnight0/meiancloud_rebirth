@@ -2,6 +2,7 @@ import os
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.templatetags.static import static
 
 
 def user_directory_path(instance, filename) -> str:
@@ -24,7 +25,6 @@ class UserProfile(models.Model):
     image = models.ImageField(
         verbose_name="头像",
         upload_to=user_directory_path,
-        default="accounts/user_img/default.png",
         max_length=100,
         blank=True,
         null=True,
@@ -34,9 +34,15 @@ class UserProfile(models.Model):
     def save(self, *args, **kwargs):
         if self.pk:
             old_instance = UserProfile.objects.get(pk=self.pk)
-            if old_instance.image and old_instance.image.name != "accounts/user_img/default.png":
+            if old_instance.image and self.image != old_instance.image:
                 old_instance.image.delete(save=False)
         super().save(*args, **kwargs)
+
+    @property
+    def avatar_url(self):
+        if self.image:
+            return self.image.url
+        return static("accounts/img/default.png")
 
     def __str__(self):
         return self.owner.username

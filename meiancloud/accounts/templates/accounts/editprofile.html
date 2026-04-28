@@ -65,7 +65,7 @@
             <label>头像</label>
             <div class="profile-image">
                 <div class="image-left">
-                    <img src="{% if userprofile.image %} {{ userprofile.image.url }} {% else %}#{% endif %}" alt="无法显示头像" id="current-image">
+                    <img src="{{ userprofile.avatar_url }}" alt="无法显示头像" id="current-image">
                 </div>
                 <div class="image-right">
                     <label for="id_image">选择头像:</label>
@@ -114,8 +114,7 @@
 
     // 恢复默认头像
     // function resetToDefault() {
-    //     //console.log("{{ MEDIA_URL }}");
-    //     document.getElementById('current-image').src = "/media/accounts/user_img/default.png";
+    //     document.getElementById('current-image').src = "{% static 'accounts/img/default.png' %}";
     //     document.getElementById('id_image').value = '';  // 清空文件输入框
     // }
     // </script>
