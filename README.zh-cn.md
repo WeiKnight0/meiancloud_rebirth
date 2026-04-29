@@ -1,7 +1,7 @@
 # 梅庵云迹重置版项目说明
 [**English**](README.md) | [简体中文](#)
 
-这是一份面向开发者的项目文档。网站本身仍沿用“梅庵云迹 / Meian Cloud”这一项目名称，而当前代码仓库是原始项目 [`r1Way/meiancloud`](https://github.com/r1Way/meiancloud) 的重置版与延续版本，现仓库地址为 [`WeiKnight0/meiancloud_rebirth`](https://github.com/WeiKnight0/meiancloud_rebirth)。若你想先了解网站本身的用途、功能与意义，请查看 [intro/README.zh-cn.md](intro/README.zh-cn.md)。
+这是一份面向开发者的项目文档。网站本身仍沿用“梅庵云迹 / Meian Cloud”这一项目名称，而当前代码仓库是原始项目 [`r1Way/meiancloud`](https://github.com/r1Way/meiancloud) 的重置版与延续版本，现仓库地址为 [`WeiKnight0/meiancloud_rebirth`](https://github.com/WeiKnight0/meiancloud_rebirth)。若你想先了解网站本身的用途、功能与意义，请查看 [intro/INTRODUCTION.zh-cn.md](intro/INTRODUCTION.zh-cn.md)。
 
 ## 项目概览
 梅庵云迹是一个基于 Django 构建的网站项目，目标是以数字化方式展示东南大学梅庵相关的历史、文化与教育意义。当前仓库包含重置后的项目代码、部署配置以及继续开发所需的相关资源。
@@ -11,7 +11,8 @@
 ## 仓库说明
 - 原始项目仓库：[https://github.com/r1Way/meiancloud](https://github.com/r1Way/meiancloud)
 - 当前重置版仓库：[https://github.com/WeiKnight0/meiancloud_rebirth](https://github.com/WeiKnight0/meiancloud_rebirth)
-- 网站介绍文档：[intro/README.zh-cn.md](intro/README.zh-cn.md)
+- 网站介绍文档：[intro/INTRODUCTION.zh-cn.md](intro/INTRODUCTION.zh-cn.md)
+- 技术文档：[docs/](docs/index.zh-cn.md)
 
 ## 项目沿革
 - 网站名称：`梅庵云迹` / `Meian Cloud`
@@ -24,10 +25,9 @@
 - 数据库：默认 SQLite，支持 MySQL
 - 部署：Docker Compose、Gunicorn、Nginx
 - 媒体处理：Pillow
-- AI 接入：基于腾讯云 SSE 的对话接口
 
 ## 系统架构
-项目采用典型的 Django 单体应用结构，通过不同 app 划分页面内容、用户系统、社区互动和 AI 服务。
+项目采用典型的 Django 单体应用结构，通过不同 app 划分页面内容、用户系统和社区互动。
 
 部署模式下的请求链路如下：
 
@@ -42,7 +42,6 @@
 - `meiancloud/core`：公共内容页面，如首页、循迹梅庵、常见问题、关于我们等
 - `meiancloud/accounts`：注册、登录、个人资料编辑、修改密码、注销账号
 - `meiancloud/community`：评论区、回复、评论审核与管理
-- `meiancloud/ai`：聊天接口与腾讯云 AI 服务接入
 - `meiancloud/mysite`：Django 项目配置、根路由、WSGI/ASGI 入口
 - `figs/`：README 预览图片等资源
 - `intro/`：面向网站介绍的中英文文档
@@ -56,7 +55,6 @@
 ├── README.zh-cn.md
 └── meiancloud/
     ├── accounts/
-    ├── ai/
     ├── community/
     ├── core/
     ├── mysite/
@@ -84,11 +82,6 @@
 - 使用单一 `Comment` 模型存储主评论与回复
 - 提供公开评论区与超级管理员审核页面
 - 通过审核状态控制评论是否对外可见
-
-### `ai`
-- 提供 `POST /api/chat/` 接口
-- 将用户输入转发到腾讯云流式对话服务
-- 最终以 JSON 形式返回回复内容
 
 ## 本地开发
 前置条件：
@@ -212,7 +205,6 @@ MYSQL_PASSWORD=SRZyhMDrMrCaWdpA
 - `MEDIA_ROOT` 为 `meiancloud/media`
 - `mysite/urls.py` 将各 app 路由统一挂载到根路径下
 - 评论审核页仅允许超级管理员访问
-- AI 服务当前依赖代码中配置的腾讯云机器人密钥
 
 ## 开发团队
 感谢梅庵云迹实践团全体成员的努力与投入。
@@ -232,7 +224,7 @@ MYSQL_PASSWORD=SRZyhMDrMrCaWdpA
       <a href="https://github.com/WeiKnight0">
         <img src="https://avatars.githubusercontent.com/weiknight0" width="100px;" alt="WeiKnight 头像"/>
         <br />
-        <sub><b>WeiKnight</b></sub>
+        <sub><b>WeiKnight（核心开发者）</b></sub>
       </a>
     </td>
   </tr>

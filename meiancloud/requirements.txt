@@ -10,8 +10,6 @@ python-engineio==4.9.0
 python-socketio==5.11.4
 requests==2.31.0
 simple-websocket==1.0.0
-sseclient-py==1.8.0
-tencentcloud-sdk-python==3.0.1224
 websocket-client==1.8.0
 websockets==13.0.1
 wsproto==1.2.0

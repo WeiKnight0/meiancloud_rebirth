@@ -1,7 +1,7 @@
 # Meian Cloud Rebirth Project Guide
 [**简体中文**](README.zh-cn.md) | [English](#)
 
-Developer-facing documentation for the Meian Cloud Rebirth repository. The website itself still uses the historical project name "Meian Cloud". This repository is a reset and continuation of the original [`r1Way/meiancloud`](https://github.com/r1Way/meiancloud) project. The current repository is [`WeiKnight0/meiancloud_rebirth`](https://github.com/WeiKnight0/meiancloud_rebirth). For a website-oriented introduction, see [intro/README.md](intro/README.md).
+Developer-facing documentation for the Meian Cloud Rebirth repository. The website itself still uses the historical project name "Meian Cloud". This repository is a reset and continuation of the original [`r1Way/meiancloud`](https://github.com/r1Way/meiancloud) project. The current repository is [`WeiKnight0/meiancloud_rebirth`](https://github.com/WeiKnight0/meiancloud_rebirth). For a website-oriented introduction, see [intro/INTRODUCTION.md](intro/INTRODUCTION.md).
 
 ## Overview
 Meian Cloud is a Django-based website project built to present the history, culture, and educational significance of Meian at Southeast University in digital form. This repository contains the reset codebase, deployment configuration, and supporting assets maintained for continued development.
@@ -11,7 +11,8 @@ Meian Cloud is a Django-based website project built to present the history, cult
 ## Repository
 - Original project: [https://github.com/r1Way/meiancloud](https://github.com/r1Way/meiancloud)
 - Current reset version: [https://github.com/WeiKnight0/meiancloud_rebirth](https://github.com/WeiKnight0/meiancloud_rebirth)
-- Intro docs: [intro/README.md](intro/README.md)
+- Intro docs: [intro/INTRODUCTION.md](intro/INTRODUCTION.md)
+- Technical docs: [docs/](docs/index.md)
 
 ## Project Lineage
 - Website name: `Meian Cloud`
@@ -24,10 +25,9 @@ Meian Cloud is a Django-based website project built to present the history, cult
 - Database: SQLite by default, MySQL supported
 - Deployment: Docker Compose, Gunicorn, Nginx
 - Media handling: Pillow
-- AI integration: Tencent Cloud SSE-based chat interface
 
 ## Architecture
-The project uses a classic Django monolith structure with separate apps for page content, accounts, community interaction, and AI services.
+The project uses a classic Django monolith structure with separate apps for page content, accounts, and community interaction.
 
 Request flow in deployment mode:
 
@@ -42,7 +42,6 @@ Browser
 - `meiancloud/core`: public content pages such as the homepage, Meian exhibition guide, FAQ, and about page
 - `meiancloud/accounts`: registration, login, profile editing, password changes, and account deletion
 - `meiancloud/community`: discussion area, replies, comment review, and moderation
-- `meiancloud/ai`: chat API endpoint and Tencent Cloud AI integration
 - `meiancloud/mysite`: Django project settings, root URLs, and WSGI/ASGI entrypoints
 - `figs/`: README images and preview assets
 - `intro/`: website-oriented bilingual introduction documents
@@ -56,7 +55,6 @@ Browser
 ├── README.zh-cn.md
 └── meiancloud/
     ├── accounts/
-    ├── ai/
     ├── community/
     ├── core/
     ├── mysite/
@@ -84,11 +82,6 @@ Browser
 - Stores top-level comments and replies in a single `Comment` model
 - Exposes a public discussion page and a superuser moderation page
 - Supports approval-based visibility for comments
-
-### `ai`
-- Exposes `POST /api/chat/`
-- Forwards user messages to Tencent Cloud's streaming chat service
-- Returns the final generated reply as JSON
 
 ## Local Development
 Prerequisites:
@@ -212,7 +205,6 @@ After switching the database backend, recreate containers and rerun migrations.
 - `MEDIA_ROOT` is `meiancloud/media`
 - `mysite/urls.py` mounts all application routes at the root level
 - superuser-only moderation is implemented in `community/comment-management/`
-- the AI service currently depends on a configured Tencent Cloud bot key in code
 
 ## Contributors
 Thanks to all members of the Meian Cloud practice team.

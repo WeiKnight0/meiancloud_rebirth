@@ -5,6 +5,7 @@ from .context import default_context
 
 
 def index(request: HttpRequest):
+    # 首页仅渲染静态内容，公共信息通过 default_context 注入。
     return render(request, "core/index.html", default_context(request))
 
 

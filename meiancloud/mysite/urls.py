@@ -9,7 +9,6 @@ from core.errors import page_not_found, permission_denied, server_error
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(('ai.urls', 'ai'), namespace='ai')),
     path('', include(('core.urls', 'core'), namespace='core')),
     path('', include(('accounts.urls', 'accounts'), namespace='accounts')),
     path('', include(('community.urls', 'community'), namespace='community')),

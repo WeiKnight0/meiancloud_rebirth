@@ -1,5 +1,5 @@
 # 梅庵云迹网站介绍
-[**English**](README.md) | [简体中文](#)
+[**English**](INTRODUCTION.md) | [简体中文](#)
 
 本文档介绍的是网站本身。网站名称仍为“梅庵云迹 / Meian Cloud”，当前代码仓库则是原始项目 [`r1Way/meiancloud`](https://github.com/r1Way/meiancloud) 的重置版，现维护仓库为 [`WeiKnight0/meiancloud_rebirth`](https://github.com/WeiKnight0/meiancloud_rebirth)。若你希望了解项目结构、代码组成和部署方式，请查看根目录中的 [README.zh-cn.md](../README.zh-cn.md)。
 
@@ -45,9 +45,6 @@
 ### 用户系统
 用户可以注册、登录并维护个人资料，从而更完整地参与互动内容。
 
-### AI 辅助问答
-首页提供 AI 智能助手入口，帮助用户快速获取信息，提高内容触达效率。
-
 ### 关于我们与项目背景
 网站还包含“关于我们”页面，用于介绍团队背景、项目动机以及相关联系渠道。
 
@@ -77,7 +74,6 @@
 2. 浏览历史介绍与展陈内容页面。
 3. 查看常见问题，快速获取重点信息。
 4. 如需互动，可注册或登录后参与评论区讨论。
-5. 如需快速问答，可直接使用 AI 助手。
 
 ## 未来展望
 后续可以继续扩展的方向包括：
@@ -85,8 +81,7 @@
 - 更完善的多语言支持
 - 更完整的参观指引信息
 - 更成熟的社区运营与审核机制
-- 更深入的 AI 历史内容辅助解读
 
 ## 相关文档
 - 开发者说明：[../README.zh-cn.md](../README.zh-cn.md)
-- English introduction: [README.md](README.md)
+- English introduction: [INTRODUCTION.md](INTRODUCTION.md)

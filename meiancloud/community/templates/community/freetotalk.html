@@ -29,7 +29,6 @@
                     <label for="id_content">内容</label>
                     {{ comment_form.content }}
                 </div>
-                <input type="hidden" name="action_type" value="action1">
                 <button type="submit" class="submit-button submitting">发表评论</button>
             </form>
         </div>
@@ -61,7 +60,7 @@
 
 
                 <div class="replies" id="replies-{{ comment.id }}" style="display: none;">
-                    {% for reply in comment.filtered_replies %}
+                    {% for reply in comment.visible_replies %}
                     <div class="reply-item">
                         <div class="reply-author">
                             <a href="{% url 'accounts:userprofile' userid=reply.owner.owner.id%}" style="text-decoration: none;">
@@ -73,7 +72,7 @@
                         <p class="reply-item-content">{{ reply.content }}</p>
                         <p class="reply-item-date">{{ reply.date|date:"Y-m-d H:i" }}</p>
                         
-                        {% if user.username == comment.owner.owner.username %}
+                        {% if user.username == reply.owner.owner.username %}
                         <button class="delete-comment-btn" data-comment-id="{{ reply.id }}">删除</button>
                         {% endif %}
                             
@@ -87,9 +86,8 @@
                    <div class="reply-form-container" style="margin-top: 10px;">
                        <form method="post" action="" class="reply-form">
                            {% csrf_token %}
-                           {{ reply_form.reply_content }}
-                           <input type="hidden" name="action_type" value="action2">
-                           <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                            {{ reply_form.reply_content }}
+                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
                            <button type="submit" class="submit-reply-button submitting">发表回复</button>
                        </form>
                    </div>
@@ -127,7 +125,7 @@
 <!-- 删除逻辑 -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // 为所有删除按钮绑定点击事件
+    // 删除通过异步请求完成，成功后直接刷新列表状态。
     document.querySelectorAll('.delete-comment-btn').forEach(button => {
         button.addEventListener('click', function() {
             console.log('开始删除');
@@ -135,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(commentId);
             if (confirm('确定要删除这条评论吗？')) {
                 // 发送 DELETE 请求
-                fetch( `/freetotalk/?comment_id=${commentId}`, {
+                fetch( `/api/comments/${commentId}/`, {
                     method: 'DELETE',
                     headers: {
                         'X-CSRFToken': '{{ csrf_token }}',  // Django CSRF 令牌
@@ -144,19 +142,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status === 'success') {
+                    if (data.success) {
                         // 删除成功，移除对应的评论 DOM 元素
                         requestAnimationFrame(() => {
                             document.querySelector(`.comment[data-comment-id="${commentId}"]`)?.remove();
                             document.querySelector(`.reply[data-comment-id="${commentId}"]`)?.remove();
                         });
-                        // document.querySelector(`.comment[data-comment-id="${commentId}"]`)?.remove();
-                        // document.querySelector(`.reply[data-comment-id="${commentId}"]`)?.remove();
                         alert('评论删除成功');
                         window.location.reload();
-                        console.log('OK');
                     } else {
-                        alert('删除失败: ' + data.message);
+                        alert('删除失败: ' + (data.error || '未知错误'));
                     }
                 })
                 .catch(error => {
@@ -173,13 +168,13 @@ document.addEventListener('DOMContentLoaded', function() {
 <script>
     document.addEventListener('DOMContentLoaded',function(){
         document.getElementById('id_comment-form').addEventListener('submit', function (event) {
-        event.preventDefault();  // 阻止表单默认提交行为
+        event.preventDefault();  // 改为 AJAX 提交，避免整页回跳
 
         // 获取表单数据
         const formData = new FormData(this);
 
-        // 异步提交表单
-        fetch('{% url "community:freetotalk" %}', {
+        // 顶级评论提交后不直接展示，需等待后台审核。
+        fetch('{% url "community:comment_create" %}', {
             method: 'POST',
             body: formData,
             headers: {
@@ -192,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('提交评论成功！请等待审核通过。');  // 弹出成功弹窗
                 window.location.reload();  // 重新加载页面
             } else {
-                alert('提交评论失败！' + (data.errors || '未知错误'));  // 弹出失败弹窗
+                alert('提交评论失败！' + (data.error || '未知错误'));  // 弹出失败弹窗
             }
         })
         .catch(error => {
@@ -210,13 +205,14 @@ document.addEventListener('DOMContentLoaded', function() {
         //console.log(reply_forms);
         [...reply_forms].forEach((form)=>{
             form.addEventListener('submit', function (event) {
-            event.preventDefault();  // 阻止表单默认提交行为
+            event.preventDefault();  // 回复也走 AJAX，保持展开区状态可控
 
         // 获取表单数据
         const formData = new FormData(this);
 
-        // 异步提交表单
-        fetch('{% url "community:freetotalk" %}', {
+        // 回复通过独立 API 提交，comment_id 拼入 URL 路径。
+        const commentId = formData.get('comment_id');
+        fetch(`/api/comments/${commentId}/replies/`, {
             method: 'POST',
             body: formData,
             headers: {
@@ -229,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('提交回复成功！请等待审核通过。');  // 弹出成功弹窗
                 window.location.reload();  // 重新加载页面
             } else {
-                alert('提交回复失败！' + (data.errors || '未知错误'));  // 弹出失败弹窗
+                alert('提交回复失败！' + (data.error || '未知错误'));  // 弹出失败弹窗
             }
         })
         .catch(error => {
@@ -244,6 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!-- 展开回复 -->
 <script>
+    // 回复区域默认折叠，点击时按评论 id 切换可见性。
     document.querySelectorAll('.reply-button').forEach(button => {
         button.addEventListener('click', function() {
             const repliesDiv = document.getElementById(`replies-${this.dataset.commentId}`);

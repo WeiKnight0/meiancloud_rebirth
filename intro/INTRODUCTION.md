@@ -1,5 +1,5 @@
 # Introduction to Meian Cloud
-[**简体中文**](README.zh-cn.md) | [English](#)
+[**简体中文**](INTRODUCTION.zh-cn.md) | [English](#)
 
 This document introduces the website itself. The website name remains "Meian Cloud", while the current code repository is the reset version [`WeiKnight0/meiancloud_rebirth`](https://github.com/WeiKnight0/meiancloud_rebirth) derived from the original [`r1Way/meiancloud`](https://github.com/r1Way/meiancloud). For developer documentation, see the root [README.md](../README.md).
 
@@ -45,9 +45,6 @@ The site includes a frequently asked questions section to help visitors quickly 
 ### User accounts
 Users can register, log in, manage personal information, and participate more fully in the interactive sections of the site.
 
-### AI-assisted inquiry
-The homepage includes an AI assistant interface that can respond to user questions and improve accessibility to site content.
-
 ### About page and project context
 The site also includes an "About Us" page that explains the team background, project motivation, and supporting contact channels.
 
@@ -77,7 +74,6 @@ Typical usage flow:
 2. Browse the exhibition and history sections for detailed content.
 3. Read the FAQ for common questions.
 4. Register or log in if you want to join discussions.
-5. Use the AI assistant for quick questions.
 
 ## Future Directions
 Possible future expansion includes:
@@ -85,8 +81,7 @@ Possible future expansion includes:
 - better multilingual support
 - more complete visitor guidance information
 - stronger moderation and community operations
-- deeper AI-assisted interpretation of historical content
 
 ## Related Documents
 - Developer guide: [../README.md](../README.md)
-- Chinese introduction: [README.zh-cn.md](README.zh-cn.md)
+- Chinese introduction: [INTRODUCTION.zh-cn.md](INTRODUCTION.zh-cn.md)

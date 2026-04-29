@@ -21,15 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv(
-    "DJANGO_SECRET_KEY",
-    "django-insecure-3d+tp2xv2&)2j^wy!$ki1j-@v@&6e@77*o*bulup!*)n$@#^5%",
-)
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() == "true"
+DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")
+ALLOWED_HOSTS = [h for h in os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",") if h]
 
 
 # Application definition
@@ -42,7 +39,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "accounts.apps.AccountsConfig",
-    "ai.apps.AiConfig",
     "community.apps.CommunityConfig",
     "core.apps.CoreConfig",
 ]
@@ -78,8 +74,9 @@ TEMPLATES = [
 WSGI_APPLICATION = "mysite.wsgi.application"
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://129.211.163.165",
-    "https://129.211.163.165",
+    origin.strip()
+    for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+    if origin.strip()
 ]
 
 # Database
@@ -111,8 +108,8 @@ else:
         "default": {
             "ENGINE": DB_ENGINE,
             "NAME": DB_NAME,
-            "USER": os.getenv("DB_USER", "meianclouddata"),
-            "PASSWORD": os.getenv("DB_PASSWORD", "SRZyhMDrMrCaWdpA"),
+            "USER": os.environ["DB_USER"],
+            "PASSWORD": os.environ["DB_PASSWORD"],
             "HOST": os.getenv("DB_HOST", "localhost"),
             "PORT": os.getenv("DB_PORT", "3306"),
         }

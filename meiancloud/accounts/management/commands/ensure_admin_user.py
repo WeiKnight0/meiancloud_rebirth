@@ -8,9 +8,9 @@ class Command(BaseCommand):
     help = "Create or update the default admin user from environment variables."
 
     def handle(self, *args, **options):
-        username = os.getenv("ADMIN_USERNAME", "admin")
-        password = os.getenv("ADMIN_PASSWORD", "123456")
-        email = os.getenv("ADMIN_EMAIL", "admin@example.com")
+        username = os.environ.get("ADMIN_USERNAME", "admin")
+        password = os.environ["ADMIN_PASSWORD"]
+        email = os.environ.get("ADMIN_EMAIL", "admin@example.com")
 
         user_model = get_user_model()
         user, created = user_model.objects.get_or_create(

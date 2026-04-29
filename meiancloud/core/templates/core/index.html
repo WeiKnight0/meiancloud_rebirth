@@ -9,7 +9,6 @@
 {% block otherstyles %}
 <link rel="stylesheet" href="{% static 'core/styles-indexstyle.css' %}">
 <link rel="stylesheet" href="{% static 'core/Swiper/swiper-bundle.min.css' %}">
-<link rel="stylesheet" href="{% static 'core/styles-chat_ai.css' %}">
 {% endblock otherstyles %}
 
 
@@ -43,37 +42,6 @@
         <div class="swiper-button-next"></div>
         <div class="swiper-button-prev"></div>
         <div class="swiper-pagination"></div>
-    </div>
-</div>
-
-<hr>
-
-<div style="display: flex; justify-content: center;">
-    <div class="chat-container">
-        <div class="chat-header">
-            <h2>AI智能助手</h2>
-        </div>
-
-        <div class="chat-messages" id="chat-messages">
-            <div class="message bot-message">
-                <div class="avatar bot-avatar">
-                    <img src="{% static 'core/img/indeximg/chat_ai_avatar.jpg' %}" alt="AI头像"
-                        style="width:40px; height:40px; border-radius:50%;">
-                </div>
-                <div class="message-content bot-content">
-                    您好！我是AI助手，很高兴为您服务。请问有什么可以帮您的吗？
-                </div>
-            </div>
-        </div>
-
-        <div class="typing-indicator" id="typing-indicator">
-            AI正在思考中...
-        </div>
-
-        <div class="chat-input">
-            <input type="text" id="user-input" placeholder="请输入您的问题..." autocomplete="off">
-            <button id="send-button" onclick="sendMessage()">发送</button>
-        </div>
     </div>
 </div>
 
@@ -130,9 +98,6 @@
 {% block script %}
 <script src="{% static 'core/Swiper/swiper-bundle.min.js' %}"></script>
 <script src="{% static 'core/script/sliderimg.js' %}"></script>
-<!-- 使用cdnjs替换jsdelivr -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
-<script src="{% static 'core/script/chat_ai.js' %}"></script>
 <script>
     var swiper = new Swiper(".indexSwiper", {
         zoom: true,

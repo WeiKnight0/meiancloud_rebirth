@@ -6,6 +6,7 @@ from django.templatetags.static import static
 
 
 def user_directory_path(instance, filename) -> str:
+    # 头像按用户 id 固定命名，便于覆盖旧头像和集中管理文件。
     ext = filename.split(".")[-1]
     filename = f"{instance.owner.id}.{ext}"
     return os.path.join("accounts", "user_img", str(instance.owner.id), filename)
@@ -32,6 +33,7 @@ class UserProfile(models.Model):
     sign = models.TextField("个性签名", max_length=100, null=True, blank=True, default="")
 
     def save(self, *args, **kwargs):
+        # 新头像上传后删除旧文件，避免媒体目录残留历史图片。
         if self.pk:
             old_instance = UserProfile.objects.get(pk=self.pk)
             if old_instance.image and self.image != old_instance.image:
@@ -40,6 +42,7 @@ class UserProfile(models.Model):
 
     @property
     def avatar_url(self):
+        # 未上传头像时统一回退到默认图片。
         if self.image:
             return self.image.url
         return static("accounts/img/default.png")

@@ -73,6 +73,7 @@ class RegisterForm(forms.Form):
     )
 
     def clean_username(self):
+        # 注册阶段先做基础唯一性校验，避免无意义创建用户。
         username_get = self.cleaned_data.get("username")
         exists = User.objects.filter(username=username_get).exists()
         if exists:
@@ -82,6 +83,7 @@ class RegisterForm(forms.Form):
         return username_get
 
     def clean_password1(self):
+        # 第二次密码输入用于确认，不单独保存。
         password_get = self.cleaned_data.get("password")
         password1_get = self.cleaned_data.get("password1")
         if password_get != password1_get:
@@ -89,6 +91,7 @@ class RegisterForm(forms.Form):
         return password1_get
 
     def clean_gender(self):
+        # 表单默认值只是占位项，提交时必须选择真实性别。
         gender_get = self.cleaned_data.get("gender")
         if gender_get == "0":
             raise forms.ValidationError("请选择性别！")
@@ -104,16 +107,31 @@ class UserProfileForm(forms.Form):
     sign = forms.CharField(
         label="个性签名", max_length=100, required=False, widget=forms.Textarea
     )
+    image = forms.ImageField(label="头像", required=False)
+
+    ALLOWED_CONTENT_TYPES = {"image/jpeg", "image/png", "image/gif", "image/webp"}
+    MAX_IMAGE_SIZE = 2 * 1024 * 1024  # 2MB
 
     def __init__(self, *args, **kwargs):
         userprofile = kwargs.pop("userprofile", None)
         super().__init__(*args, **kwargs)
         if userprofile is None:
             raise ValueError("UnknownError")
+        # 编辑表单直接回填当前资料，模板无需重复拼接初始值。
         self.fields["nick_name"].initial = userprofile.nick_name
         self.fields["gender"].initial = userprofile.gender
         self.fields["birthday"].initial = str(userprofile.birthday).replace("/", "-")
         self.fields["sign"].initial = userprofile.sign
+
+    def clean_image(self):
+        image = self.cleaned_data.get("image")
+        if not image:
+            return image
+        if image.content_type not in self.ALLOWED_CONTENT_TYPES:
+            raise forms.ValidationError("仅支持 JPG、PNG、GIF、WebP 格式")
+        if image.size > self.MAX_IMAGE_SIZE:
+            raise forms.ValidationError("图片不能超过 2MB")
+        return image
 
 
 class ChangePasswordForm(forms.Form):
@@ -140,12 +158,14 @@ class ChangePasswordForm(forms.Form):
         super().__init__(*args, **kwargs)
 
     def clean_old(self):
+        # 修改密码前必须先验证旧密码。
         old_password = self.cleaned_data.get("old")
         if not authenticate(username=self.user.username, password=old_password):
             raise forms.ValidationError("旧密码不正确")
         return old_password
 
     def clean_new2(self):
+        # 在第二次输入阶段完成新密码一致性校验。
         new1 = self.cleaned_data.get("new1")
         new2 = self.cleaned_data.get("new2")
         if new1 and new2 and new1 != new2:

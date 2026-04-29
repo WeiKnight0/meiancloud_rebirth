@@ -15,10 +15,7 @@
         function showLogoutDialog() {
             const result = window.confirm("你确定要退出登录吗?");
             if (result) {
-                window.location.href = "{% url 'accounts:logout' %}";
-            }
-            else {
-                window.location.reload();
+                document.getElementById('logout-form').submit();
             }
         }
     </script>
@@ -73,6 +70,9 @@
             <a href="{% url 'core:about' %}" class="nav-text">关于我们</a>
 
             {% if user.is_authenticated %}
+            <form id="logout-form" method="post" action="{% url 'accounts:logout' %}" style="display:none;">
+                {% csrf_token %}
+            </form>
             <a href="javascript:void(0);" onclick="showLogoutDialog();" class="nav-text">退出登录</a>
             {% else %}
             <a href="{% url 'accounts:login' %}" class="nav-text">登录</a>

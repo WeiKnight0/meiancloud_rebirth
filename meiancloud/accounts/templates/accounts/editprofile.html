@@ -70,6 +70,13 @@
                 <div class="image-right">
                     <label for="id_image">选择头像:</label>
                     <input type="file" name="image" id="id_image" accept="image/*">
+                    {% if form.image.errors %}
+                        <div>
+                            {% for error in form.image.errors %}
+                                <p style="color:red;">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                     <!-- <button type="button" class="reset-button" onclick="resetToDefault()">恢复至默认</button> -->
                 </div>
             </div>
