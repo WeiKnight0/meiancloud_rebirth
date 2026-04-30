@@ -227,7 +227,7 @@ MYSQL_PASSWORD=SRZyhMDrMrCaWdpA
 ## 开发团队
 感谢梅庵云迹实践团全体成员的努力与投入。
 
-核心开发者：
+开发团队：
 
 <table>
   <tr>

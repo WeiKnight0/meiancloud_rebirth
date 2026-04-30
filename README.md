@@ -227,7 +227,7 @@ After switching the database backend, recreate containers and rerun migrations.
 ## Contributors
 Thanks to all members of the Meian Cloud practice team.
 
-Core contributors:
+Development team:
 
 <table>
   <tr>
