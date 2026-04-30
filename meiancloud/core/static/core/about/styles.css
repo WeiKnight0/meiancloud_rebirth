@@ -1,11 +1,9 @@
-/*about.html的样式设置*/
-
 .info-container {
     text-align: center;
     display: flex;
+    gap: 16px;
 }
 
-/* 每一块的通用样式 */
 .block {
     flex: 1;
     text-align: center;
@@ -13,32 +11,27 @@
     border-right: 1px solid #ddd;
 }
 
-/* 去掉最后一块的右边框 */
 .block:last-child {
     border-right: none;
 }
 
-/* 图片样式 */
 .block img {
+    max-width: 100%;
     width: 200px;
-    /* height: 100px; */
     margin-bottom: 15px;
     transition: transform 0.3s ease;
 }
 
-/* 图片悬停效果 */
 .block img:hover {
     transform: scale(1.05);
 }
 
-/* 文字样式 */
 .block h3 {
     font-size: 18px;
     margin-bottom: 10px;
     color: #333;
 }
 
-/* 链接样式 */
 .block a {
     text-decoration: none;
     color: #0073e6;
@@ -47,4 +40,19 @@
 
 .block a:hover {
     text-decoration: underline;
+}
+
+@media (max-width: 760px) {
+    .info-container {
+        flex-direction: column;
+    }
+
+    .block {
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .block:last-child {
+        border-bottom: none;
+    }
 }

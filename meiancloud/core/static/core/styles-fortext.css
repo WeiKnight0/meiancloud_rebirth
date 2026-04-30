@@ -1,16 +1,6 @@
-/* body, html {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-} */
-
 .agreement-box ,
 .about{
+    box-sizing: border-box;
     width: 90%;
     padding: 20px;
     margin: 10px auto;
@@ -19,20 +9,27 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    max-width: 800px; /* 限制最大宽度以适应不同屏幕 */
 }
 
 .agreement-box h1,
 .about h1 {
-    /* font-size: 24px; */
     text-align: center;
     margin-bottom: 20px;
 }
 
 .agreement-box p,
 .about p {
-    text-indent: 4ex;
+    text-indent: 2em;
     font-size: 16px;
     line-height: 1.5;
     margin-bottom: 15px;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 520px) {
+    .agreement-box,
+    .about {
+        width: calc(100% - 24px);
+        padding: 14px;
+    }
 }

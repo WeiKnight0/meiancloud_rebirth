@@ -5,23 +5,11 @@
 {% endblock title %}
 
 {% block otherstyles %}
-    <!-- <style>
-        .errorlist{display: none;}
-    </style> -->
     <link rel="stylesheet" href="{% static 'accounts/styles/login.css' %}">
 {% endblock otherstyles %}
 
-{% block headscript %}
-<script>
-    function showSuccessMessage(){
-        alert('注册成功！');  // 弹窗显示消息
-        window.location.href = "{% url 'core:index' %}";
-    }
-</script>
-{% endblock headscript %}
-
 {% block content %}
-<div class="container" style="text-align: center;">
+<div class="auth-page" data-success="{% if success %}true{% else %}false{% endif %}" data-success-message="注册成功！" data-success-redirect="{% url 'core:index' %}">
     <div class="login-container">
         <h2>欢迎来到梅庵云迹！</h2>
         <p>注册账户，开启新的梅庵之旅！</p>
@@ -37,7 +25,7 @@
 
         <form method="post" class="login-form">
             {% csrf_token %}
-            <div class="form-group">
+            <div class="auth-form-group">
                 <label for="id_username">用户名</label>
                 {{ form.username }}
                 {% if form.username.errors %}
@@ -48,7 +36,7 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="auth-form-group">
                 <label for="id_password">密码</label>
                 {{ form.password }}
                 {% if form.password.errors %}
@@ -59,7 +47,7 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="auth-form-group">
                 <label for="id_password1">再次输入密码</label>
                 {{ form.password1 }}
                 {% if form.password1.errors %}
@@ -70,7 +58,7 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="auth-form-group">
                 <label for="id_email">邮箱</label>
                 {{ form.email }}
                 {% if form.email.errors %}
@@ -82,7 +70,7 @@
                 {% endif %}
             </div>
             <hr>
-            <div class="form-group">
+            <div class="auth-form-group">
                 <label for="id_nick_name">昵称</label>
                 {{ form.nick_name }}
                 {% if form.nick_name.errors %}
@@ -93,7 +81,7 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="auth-form-group">
                 <label for="id_gender" class="label_gender">性别</label>
                 {{ form.gender }}
                 {% if form.gender.errors %}
@@ -104,7 +92,7 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="auth-form-group">
                 <label for="id_birthday">生日</label>
                 {{ form.birthday }}
                 {% if form.birthday.errors %}
@@ -115,7 +103,7 @@
                     </div>
                 {% endif %}
             </div>
-            <button type="submit" class="login-button">立即注册</button>
+            <button type="submit" class="submit-button">立即注册</button>
         </form>
 
         <div class="signup-link">
@@ -128,9 +116,8 @@
     </div>
 </div>
 
-    
-    {% if success %}
-        <script>showSuccessMessage();</script>
-    {% endif %}
-        
 {% endblock content %}
+
+{% block script %}
+<script src="{% static 'accounts/script/auth-success.js' %}"></script>
+{% endblock script %}

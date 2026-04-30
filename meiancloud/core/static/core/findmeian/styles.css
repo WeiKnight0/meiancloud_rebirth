@@ -1,39 +1,40 @@
+.page-title {
+    text-align: center;
+}
+
 .buttons {
     display: flex;
     flex-direction:column ;
     justify-content: center;  
-    /* border: 10px solid yellow; */
-    /* flex-wrap: wrap; */
-    /* justify-content: space-around; */
+    max-width: 100%;
 }
 
 .buttons button {
     font-size: 16px;
     background-color: #B0E0E6;
     color: black;
-    border-radius: 5px;/*按钮的圆角半径*/
+    border-radius: 5px;
     cursor: pointer;
-    /* margin-bottom: 15px; */
     transition: background-color 0.3s ease;
 }
 
 .buttons .corridor { 
     display: flex;
-    align-items: center; /* 垂直居中内容 */
-    text-align: center; /* 水平居中字体 */
-    justify-content: center; /* 水平居中 */
+    align-items: center;
+    text-align: center;
+    justify-content: center;
     font-size: 16px;
     color: white;
-    border-radius: 5px;/*按钮的圆角半径*/
+    border-radius: 5px;
     cursor: pointer;
 
-	width: 350px;              /* 矩形的宽度 */
-    height: 40px;             /* 矩形的高度 */
-    background-color: #4CAF50;  /* 矩形的背景颜色 */
+	width: 350px;
+    max-width: 100%;
+    height: 40px;
+    background-color: #4CAF50;
 }
 
 .buttons .line1 .left {
-    /* 在这里添加针对 .left 元素的样式 */
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -48,12 +49,12 @@
 .line1{
     display: flex;
     flex-direction: row;
-    justify-content: center; /* 水平居中 */
+    justify-content: center;
 }
 .room14{
     display: flex;
     flex-direction: row;
-    align-items: center; /* 垂直居中 */
+    align-items: center;
 }
 
 .room56{
@@ -64,7 +65,7 @@
 .room23{
     display: flex;
     flex-direction: row;
-    justify-content: center; /* 水平居中 */
+    justify-content: center;
 }
 
 .button1{
@@ -84,7 +85,6 @@
     border: none;
     border-radius: 5px;
     margin: 20px 40px;
-    /* border: 10px solid yellow; */
 }
 
 .sections section.active {
@@ -100,7 +100,7 @@
 .button6 {
 	    width: 90px;
     height: 100px;
-    margin: 0px px 0px 0px ;
+    margin: 0px 0px 0px 0px ;
 }
 
 .button2 {
@@ -114,25 +114,23 @@
     height: 100px;
     margin: 0px 10px 0px 0px ;
 }
-/* FILEPATH: /findmeian/styles.css */
 .center-content {
-    text-align: center; /* 文本居中 */
-    margin-top: 20px; /* 可以根据需要调整间距 */
+    text-align: center;
+    margin-top: 20px;
 }
 
 
-/* 初始状态：隐藏并位于左右两侧 */
 .image-container, .text-container {
     opacity: 0;
     transition: opacity 1s ease, transform 1s ease;
 }
 
 .text-container{
-    margin-top: 20px; /* 根据需要调整上边距 */
+    margin-top: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%; /* 确保容器高度为100%，以便垂直居中 */
+    height: 100%;
 }
 
 
@@ -147,10 +145,9 @@
 .scroll-section{
     justify-content: space-between;
     display: flex;
-    height: 500px;
+    min-height: 500px;
     opacity: 0;
     transition: opacity 1s ease, transform 1s ease;
-    /* overflow: hidden; */
     align-items: flex-start;
 }
 
@@ -160,7 +157,6 @@
     
 }
 
-/* 动画触发时的状态 */
 .scroll-section.visible .image-container,
 .scroll-section.visible .text-container {
     opacity: 1;
@@ -171,21 +167,20 @@
     display: flex;
     margin: 10px;
     height: 100%;
-    /* border: 10px solid gray; */
 }
 .text-container{
     display: flex;
-    flex-direction: column; /* 垂直排列子元素 */
+    flex-direction: column;
     margin: 10px;
     align-items: center;
-    /* border: 10px solid red; */
 }
 
 .mySwiper{
 --swiper-navigation-color: #fff;
 --swiper-pagination-color: #fff;
-width: 500px; height: 100%;
-/* border: 10px solid yellow; */
+width: 500px;
+max-width: 100%;
+height: 500px;
 }
 
 p.text{
@@ -193,9 +188,79 @@ p.text{
     margin: 10px;
 }
 
-/* findmeian弄窄一些 2025_2_16_lxc */
 .sections{
-    width: 1200px;
-    margin: 0 auto; /* 添加这行代码实现水平居中 */
-    /* border: 10px solid red; */
+    width: min(1200px, 100%);
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+    .sections section {
+        margin: 20px 12px;
+        padding: 12px;
+    }
+
+    .scroll-section {
+        flex-direction: column;
+        min-height: 0;
+        align-items: stretch;
+    }
+
+    .image-container,
+    .text-container {
+        transform: translateY(24px);
+        width: auto;
+        height: auto;
+    }
+
+    .mySwiper {
+        width: 100%;
+        height: 320px;
+    }
+
+    .text-container {
+        align-items: stretch;
+    }
+
+    p.text {
+        text-indent: 2em;
+        line-height: 1.7;
+    }
+}
+
+@media (max-width: 520px) {
+    .buttons {
+        padding: 0 12px;
+        box-sizing: border-box;
+    }
+
+    .line1,
+    .room14,
+    .room23 {
+        flex-wrap: wrap;
+    }
+
+    .room56 {
+        flex-direction: row;
+    }
+
+    .button1,
+    .button2,
+    .button3,
+    .button4,
+    .button5,
+    .button6 {
+        width: calc(50% - 8px);
+        height: 64px;
+        margin: 4px;
+    }
+
+    .buttons .corridor {
+        width: calc(100% - 8px);
+        margin: 4px;
+    }
+
+    .mySwiper {
+        height: 240px;
+    }
 }

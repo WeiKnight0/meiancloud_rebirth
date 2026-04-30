@@ -128,7 +128,8 @@ python3 manage.py runserver
 说明：
 - `meiancloud/.env.example` 默认使用 SQLite，便于本地直接启动
 - `meiancloud/.env` 不应提交真实密钥或生产密码
-- Docker 启动命令中会自动执行迁移、收集静态文件，并确保管理员账号存在
+- 默认 Docker 开发启动命令会自动执行迁移，并确保管理员账号存在
+- 静态文件收集只属于基础的偏生产 Compose 命令，不属于开发覆盖配置
 
 `.env.example` 默认管理员账号：
 - 用户名：`admin`
@@ -150,15 +151,32 @@ docker compose up --build
 ```
 
 该命令会启动：
-- `mysql`
 - 使用 `runserver` 的 `django`
-- `nginx`
+
+开发环境覆盖配置默认不会启动 MySQL 或 Nginx。Django 会使用 SQLite（`db.sqlite3`），并在 `DJANGO_DEBUG=True` 时直接服务开发静态文件。
 
 开发环境默认访问点：
-- 网站：`http://localhost`
-- Django 直连：`http://localhost:8000`
-- MySQL：`127.0.0.1:3307`
-- 后台：`http://localhost/admin/`
+- 网站：`http://localhost:8000`
+- 后台：`http://localhost:8000/admin/`
+
+可选开发 profile：
+
+```shell
+# 同时启动项目自带 MySQL 容器
+docker compose --profile mysql up --build
+
+# 同时启动 Nginx
+docker compose --profile nginx up --build
+
+# 同时启动 Django、MySQL 和 Nginx
+docker compose --profile mysql --profile nginx up --build
+```
+
+profile 说明：
+- `mysql` 会把 MySQL 暴露到 `127.0.0.1:3307`
+- `nginx` 会把站点暴露到 `http://localhost`
+- 开发覆盖配置仍然会让 Django 使用 SQLite，除非你显式修改数据库环境变量
+- 如果开发时启用 Nginx，`/static/` 会从 `staticfiles` 读取；如果没有运行 `collectstatic`，它可能和 `http://localhost:8000` 直连 Django 的静态资源表现不同
 
 偏生产方式启动：
 

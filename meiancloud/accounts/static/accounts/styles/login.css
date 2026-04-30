@@ -1,13 +1,18 @@
 /* Login Container */
 .login-container {
+    box-sizing: border-box;
     margin: 70px auto;
     background-color: #ffffff;
     padding: 2rem 2.5rem 2rem 2rem;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 400px;
+    width: min(400px, calc(100vw - 32px));
     text-align: center;
     align-items: center;
+}
+
+.auth-page {
+    text-align: center;
 }
 
 .login-container h2 {
@@ -26,20 +31,21 @@
     flex-direction: column;
 }
 
-.form-group {
+.auth-form-group {
     margin-bottom: 1.5rem;
     text-align: left;
 }
 
-.form-group label {
+.auth-form-group label {
     display: block;
     margin-bottom: 0.5rem;
     color: #333;
     font-weight: bold;
 }
 
-.form-group input,
-.form-group select {
+.auth-form-group input,
+.auth-form-group select {
+    box-sizing: border-box;
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #ddd;
@@ -48,12 +54,13 @@
     color: #333;
 }
 
-.form-group input:focus {
+.auth-form-group input:focus,
+.auth-form-group select:focus {
     border-color: #264c30;
     outline: none;
 }
 
-.form-group .input-birthday{
+.auth-form-group .input-birthday{
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -74,7 +81,8 @@
 }
 
 /* Button Styles */
-.login-button {
+.login-button,
+.submit-button {
     background-color: #264c30;
     color: #ffffff;
     padding: 0.75rem;
@@ -85,7 +93,15 @@
     transition: background-color 0.3s ease;
 }
 
-.login-button:hover {
+@media (max-width: 520px) {
+    .login-container {
+        margin: 32px auto;
+        padding: 1.5rem;
+    }
+}
+
+.login-button:hover,
+.submit-button:hover {
     background-color: #263b30;
 }
 

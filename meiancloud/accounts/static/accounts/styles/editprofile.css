@@ -1,25 +1,26 @@
-.container {
+.edit-profile-container {
+    box-sizing: border-box;
     margin: 70px auto;
     background-color: #ffffff;
     padding: 2rem 2.5rem 2rem 2rem;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 400px;
+    width: min(400px, calc(100vw - 32px));
     text-align: center;
     align-items: center;
 }
 
-h2 {
+.edit-profile-container h2 {
     color: #264c30;
     text-align: center;
     margin-bottom: 20px;
 }
 
-form div {
+.edit-profile-container form div {
     margin-bottom: 15px;
 }
 
-label {
+.edit-profile-container label {
     display: block;
     margin-bottom: 5px;
     color: #264730;
@@ -27,9 +28,9 @@ label {
     text-align: left;
 }
 
-input[type="text"],
-input[type="date"],
-select {
+.edit-profile-container input[type="text"],
+.edit-profile-container input[type="date"],
+.edit-profile-container select {
     box-sizing: border-box;
     width: 100%;
     padding: 8px;
@@ -40,7 +41,8 @@ select {
     font-family: Arial, sans-serif;
 }
 
-textarea{
+.edit-profile-container textarea{
+    box-sizing: border-box;
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
@@ -51,7 +53,7 @@ textarea{
     font-family: Arial, sans-serif;
 }
 
-input[type="file"] {
+.edit-profile-container input[type="file"] {
     box-sizing: border-box;
     width: 100%;
     padding: 8px;
@@ -91,6 +93,18 @@ input[type="file"] {
     justify-content: space-between;
     gap: 20px;
     padding: 20px;
+}
+
+@media (max-width: 520px) {
+    .edit-profile-container {
+        margin: 32px auto;
+        padding: 1.5rem;
+    }
+
+    .profile-image {
+        flex-direction: column;
+        padding: 12px 0;
+    }
 }
 
 /* 左侧的图片区域 */

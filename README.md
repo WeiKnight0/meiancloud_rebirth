@@ -128,7 +128,8 @@ Important variables:
 Notes:
 - `meiancloud/.env.example` defaults to SQLite so local setup works immediately
 - `meiancloud/.env` should not contain real secrets in version control
-- the startup commands used in Docker also run migrations, collect static files, and ensure the admin account exists
+- the default Docker development command runs migrations and ensures the admin account exists
+- static collection is only part of the base production-style Compose command, not the development override
 
 Default admin account in `.env.example`:
 - Username: `admin`
@@ -150,15 +151,32 @@ docker compose up --build
 ```
 
 This starts:
-- `mysql`
 - `django` with `runserver`
-- `nginx`
+
+The development override intentionally does not start MySQL or Nginx by default. Django uses SQLite (`db.sqlite3`) and serves development static files directly when `DJANGO_DEBUG=True`.
 
 Default development access points:
-- Website: `http://localhost`
-- Django directly: `http://localhost:8000`
-- MySQL: `127.0.0.1:3307`
-- Admin: `http://localhost/admin/`
+- Website: `http://localhost:8000`
+- Admin: `http://localhost:8000/admin/`
+
+Optional development profiles:
+
+```shell
+# Start the bundled MySQL container as well
+docker compose --profile mysql up --build
+
+# Start Nginx as well
+docker compose --profile nginx up --build
+
+# Start Django, MySQL, and Nginx together
+docker compose --profile mysql --profile nginx up --build
+```
+
+Profile notes:
+- `mysql` exposes MySQL on `127.0.0.1:3307`
+- `nginx` exposes the site on `http://localhost`
+- the development override still sets Django to SQLite unless you explicitly change database environment variables
+- if Nginx is enabled in development, `/static/` is served from `staticfiles`; this can differ from `http://localhost:8000` unless `collectstatic` has been run
 
 Production-style startup:
 

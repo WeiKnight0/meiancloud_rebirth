@@ -10,22 +10,21 @@
 {% endblock otherstyles %}
 
 {% block content %}
-<!-- <h1 class="page-title">畅所欲言</h1> -->
-<h1 style="text-align: center;">畅所欲言</h1>
+<h1 class="freetotalk-page-title">畅所欲言</h1>
 
-<div class="container">
+<div class="freetotalk-container" data-csrf-token="{{ csrf_token }}" data-comment-create-url="{% url 'community:comment_create' %}">
     <div class="content-wrapper">
         
         <!-- 评论表单 -->
         <div class="comment-form">
-            <h3 style="text-align: center;">在这里畅所欲言，发表您对梅庵的见解吧！</h3>
+            <h3 class="section-title">在这里畅所欲言，发表您对梅庵的见解吧！</h3>
             <form action="" method="post" id="id_comment-form">
                 {% csrf_token %}
-                <div class="form-group">
+                <div class="freetotalk-form-group">
                     <label for="id_title">标题</label>
                     {{ comment_form.title }}
                 </div>
-                <div class="form-group">
+                <div class="freetotalk-form-group">
                     <label for="id_content">内容</label>
                     {{ comment_form.content }}
                 </div>
@@ -35,12 +34,12 @@
 
         <!-- 评论区 -->
         <div class="comment-container">
-            <h3 style="text-align: center;">评论区</h3>
+            <h3 class="section-title">评论区</h3>
             {% for comment in comments %}
             <div class="comment-item"  data-comment-id="{{ comment.id }}">
                 <div class="comment-header">
                     <div class="comment-author">
-                        <a href="{% url 'accounts:userprofile' userid=comment.owner.owner.id%}" style="text-decoration: none;">
+                        <a href="{% url 'accounts:userprofile' userid=comment.owner.owner.id%}" class="avatar-link">
                             <img src="{{ comment.owner.avatar_url }}" alt="avatar" class="comment-avatar">
                         </a>
                         <a href="{% url 'accounts:userprofile' userid=comment.owner.owner.id%}" class="comment-nick">{{ comment.owner.nick_name }}</a>
@@ -59,11 +58,11 @@
                 {% endif %}
 
 
-                <div class="replies" id="replies-{{ comment.id }}" style="display: none;">
+                <div class="replies" id="replies-{{ comment.id }}">
                     {% for reply in comment.visible_replies %}
-                    <div class="reply-item">
+                    <div class="reply-item" data-comment-id="{{ reply.id }}">
                         <div class="reply-author">
-                            <a href="{% url 'accounts:userprofile' userid=reply.owner.owner.id%}" style="text-decoration: none;">
+                            <a href="{% url 'accounts:userprofile' userid=reply.owner.owner.id%}" class="avatar-link">
                                 <img src="{{ reply.owner.avatar_url }}" alt="avatar" class="reply-avatar">
                             </a>
                             <a href="{% url 'accounts:userprofile' userid=reply.owner.owner.id%}" class="reply-nick"><b>{{ reply.owner.nick_name }}</b></a>
@@ -83,7 +82,7 @@
                     <hr>
                     <p>发表回复</p>
                     <!-- 添加回复表单 -->
-                   <div class="reply-form-container" style="margin-top: 10px;">
+                   <div class="reply-form-container">
                        <form method="post" action="" class="reply-form">
                            {% csrf_token %}
                             {{ reply_form.reply_content }}
@@ -122,130 +121,5 @@
 {% endblock content %}
 
 {% block script %}
-<!-- 删除逻辑 -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // 删除通过异步请求完成，成功后直接刷新列表状态。
-    document.querySelectorAll('.delete-comment-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            console.log('开始删除');
-            const commentId = this.getAttribute('data-comment-id');
-            console.log(commentId);
-            if (confirm('确定要删除这条评论吗？')) {
-                // 发送 DELETE 请求
-                fetch( `/api/comments/${commentId}/`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}',  // Django CSRF 令牌
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // 删除成功，移除对应的评论 DOM 元素
-                        requestAnimationFrame(() => {
-                            document.querySelector(`.comment[data-comment-id="${commentId}"]`)?.remove();
-                            document.querySelector(`.reply[data-comment-id="${commentId}"]`)?.remove();
-                        });
-                        alert('评论删除成功');
-                        window.location.reload();
-                    } else {
-                        alert('删除失败: ' + (data.error || '未知错误'));
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('删除失败，请稍后重试');
-                });
-            }
-        });
-    });
-});
-</script>
-
-<!-- 提交评论逻辑 -->
-<script>
-    document.addEventListener('DOMContentLoaded',function(){
-        document.getElementById('id_comment-form').addEventListener('submit', function (event) {
-        event.preventDefault();  // 改为 AJAX 提交，避免整页回跳
-
-        // 获取表单数据
-        const formData = new FormData(this);
-
-        // 顶级评论提交后不直接展示，需等待后台审核。
-        fetch('{% url "community:comment_create" %}', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRFToken': formData.get('csrfmiddlewaretoken')  // 传递 CSRF token
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('提交评论成功！请等待审核通过。');  // 弹出成功弹窗
-                window.location.reload();  // 重新加载页面
-            } else {
-                alert('提交评论失败！' + (data.error || '未知错误'));  // 弹出失败弹窗
-            }
-        })
-        .catch(error => {
-            console.error('评论提交失败：', error);
-            alert('评论提交失败，请稍后重试。');
-        });
-        });
-    });
-</script>
-
-<!-- 提交回复逻辑 -->
-<script>
-    document.addEventListener('DOMContentLoaded', function(){
-        var reply_forms=document.getElementsByClassName('reply-form');
-        //console.log(reply_forms);
-        [...reply_forms].forEach((form)=>{
-            form.addEventListener('submit', function (event) {
-            event.preventDefault();  // 回复也走 AJAX，保持展开区状态可控
-
-        // 获取表单数据
-        const formData = new FormData(this);
-
-        // 回复通过独立 API 提交，comment_id 拼入 URL 路径。
-        const commentId = formData.get('comment_id');
-        fetch(`/api/comments/${commentId}/replies/`, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRFToken': formData.get('csrfmiddlewaretoken')  // 传递 CSRF token
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('提交回复成功！请等待审核通过。');  // 弹出成功弹窗
-                window.location.reload();  // 重新加载页面
-            } else {
-                alert('提交回复失败！' + (data.error || '未知错误'));  // 弹出失败弹窗
-            }
-        })
-        .catch(error => {
-            console.error('回复提交失败：', error);
-            alert('回复提交失败，请稍后重试。');
-        });
-        });
-        });
-        
-    });
-</script>
-
-<!-- 展开回复 -->
-<script>
-    // 回复区域默认折叠，点击时按评论 id 切换可见性。
-    document.querySelectorAll('.reply-button').forEach(button => {
-        button.addEventListener('click', function() {
-            const repliesDiv = document.getElementById(`replies-${this.dataset.commentId}`);
-            repliesDiv.style.display = repliesDiv.style.display === 'block' ? 'none' : 'block';
-        });
-    });
-</script>
+<script src="{% static 'community/freetotalk/freetotalk.js' %}"></script>
 {% endblock script %}

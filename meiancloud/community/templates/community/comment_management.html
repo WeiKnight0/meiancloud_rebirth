@@ -12,7 +12,7 @@
     
 
 {% block content %}
-<h1 style="text-align: center;">评论管理</h1>
+<h1 class="comment-management-title">评论管理</h1>
 <div class="table-container">
 <table>
     <thead>
@@ -36,23 +36,23 @@
             <td>{{ comment.owner.owner.username }}</td>
             <td>{{ comment.date }}</td>
             <td>{{ comment.parent_comment.id}}</td>
-            <td>{% if comment.is_checked %}<span style="color: green;">已审核</span>
-                {% else %}<span style="color: red;">未审核</span>{% endif %}</td>
+            <td>{% if comment.is_checked %}<span class="status-approved">已审核</span>
+                {% else %}<span class="status-pending">未审核</span>{% endif %}</td>
             <td>
                 
                 {% if not comment.is_checked %}
-                <form method="post" style="display:inline;">
+                <form method="post" class="inline-form">
                     {% csrf_token %}
                     <input type="hidden" name="comment_id" value="{{ comment.id }}">
                     <button type="submit" name="approve">审核通过</button>
                 </form>
-                <form method="post" style="display:inline;">
+                <form method="post" class="inline-form">
                     {% csrf_token %}
                     <input type="hidden" name="comment_id" value="{{ comment.id }}">
                     <button type="submit" name="delete">审核不通过</button>
                 </form>
                 {% else %}
-                <form method="post" style="display:inline;">
+                <form method="post" class="inline-form">
                     {% csrf_token %}
                     <input type="hidden" name="comment_id" value="{{ comment.id }}">
                     <button type="submit" name="delete">删除评论</button>

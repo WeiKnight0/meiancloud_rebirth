@@ -1,16 +1,24 @@
 services:
   mysql:
+    profiles:
+      - mysql
     ports:
       - "3307:3306"
 
   django:
+    depends_on: !reset []
     environment:
       DJANGO_DEBUG: ${DJANGO_DEBUG:-True}
+      DB_ENGINE: django.db.backends.sqlite3
+      DB_NAME: db.sqlite3
     working_dir: /app
-    command: sh -c "python manage.py migrate && python manage.py ensure_admin_user && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python manage.py migrate && python manage.py ensure_admin_user && python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     volumes:
       - .:/app
-      - static_data:/app/staticfiles
       - media_data:/app/media
+
+  nginx:
+    profiles:
+      - nginx

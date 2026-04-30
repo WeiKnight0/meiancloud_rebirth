@@ -1,23 +1,24 @@
-/* 基础样式 */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
-
-.container {
+.freetotalk-container {
+    box-sizing: border-box;
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    color: #333;
 }
 
-.page-title {
+.freetotalk-page-title {
     text-align: center;
     font-size: 3rem;
     color: #333;
     margin-bottom: 20px;
+}
+
+.section-title {
+    text-align: center;
+}
+
+.avatar-link {
+    text-decoration: none;
 }
 
 /* 评论表单 */
@@ -29,18 +30,20 @@ body {
     margin-bottom: 30px;
 }
 
-.form-group {
+.freetotalk-form-group {
     margin-bottom: 15px;
     margin-right: 15px;
 }
 
-.form-group label {
+.freetotalk-form-group label {
     display: block;
     font-weight: bold;
     margin-bottom: 5px;
 }
 
-.form-group input{
+.freetotalk-form-group input,
+.freetotalk-form-group textarea {
+    box-sizing: border-box;
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
@@ -101,6 +104,7 @@ body {
     font-size: 1rem;
     color: #555;
     line-height: 1.5;
+    overflow-wrap: anywhere;
 }
 
 .no-comments {
@@ -113,6 +117,13 @@ body {
 .pagination {
     text-align: center;
     margin-top: 20px;
+}
+
+.step-links {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
 }
 
 .pagination-link {
@@ -151,17 +162,21 @@ body {
 }
 
 .replies {
+    display: none;
     margin-top: 10px;
     padding: 10px;
     border-left: 2px solid #264c30;
     background-color: #f9f9f9;
 }
 
+.reply-form-container {
+    margin-top: 10px;
+}
+
 .reply-item p.reply-item-content{
-    /* text-indent: 0ex; */
-    /* display: flex; */
     justify-content: left;
     margin-left: 30px;
+    overflow-wrap: anywhere;
 }
 .reply-item p.reply-item-date{
     font-size: 12px;
@@ -178,7 +193,6 @@ body {
     padding: 10px 10px;
     border-radius: 4px;
     cursor: pointer;
-    /* font-size: 1rem; */
 }
 .submit-reply-button:hover{
     background-color: #263b30;
@@ -192,6 +206,7 @@ body {
 .comment-author{
     display: flex;
     align-items: center;
+    min-width: 0;
 }
 
 .comment-avatar{
@@ -199,21 +214,20 @@ body {
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
-    /* border: 3px solid #fff; */
 }
 .comment-author a.comment-nick{
     font-weight: bold;
     color: #264c30;
     margin-left: 10px;
-    /* color: white; */
     text-decoration: none;
     font-size: 20px;
-    /* border: 10px solid red; */
+    overflow-wrap: anywhere;
 }
 
 .reply-author{
     display: flex;
     align-items: center;
+    min-width: 0;
 }
 
 .reply-avatar{
@@ -221,14 +235,56 @@ body {
     height: 35px;
     border-radius: 50%;
     object-fit: cover;
-    /* border: 3px solid #fff; */
 }
 
 .reply-author a.reply-nick{
     font-weight: bold;
     color: #264c30;
     margin-left: 10px;
-    /* color: white; */
     text-decoration: none;
     font-size: 16px;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 520px) {
+    .freetotalk-container {
+        padding: 12px;
+    }
+
+    .freetotalk-page-title {
+        font-size: 2rem;
+    }
+
+    .comment-form,
+    .comment-container {
+        padding: 14px;
+    }
+
+    .freetotalk-form-group {
+        margin-right: 0;
+    }
+
+    .comment-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .comment-date {
+        align-self: flex-end;
+    }
+
+    .reply-button,
+    .delete-comment-btn {
+        margin-top: 6px;
+    }
+
+    .reply-item p.reply-item-content {
+        margin-left: 0;
+    }
+
+    .reply-form textarea {
+        box-sizing: border-box;
+        width: 100%;
+    }
 }

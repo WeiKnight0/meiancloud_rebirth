@@ -10,17 +10,8 @@
     <link rel="stylesheet" href="{% static 'accounts/styles/editprofile.css' %}">
 {% endblock otherstyles %}
 
-{% block headscript %}
-<script>
-    function showSuccessMessage(x){
-        alert('修改成功');  // 弹窗显示消息
-        window.location.href = "{% url 'accounts:userprofile' userid=user.id %}";
-    }
-</script>
-{% endblock headscript %}
-
 {% block content %}
-<div class="container">
+<div class="edit-profile-container" data-success="{% if success %}true{% else %}false{% endif %}" data-success-message="修改成功" data-success-redirect="{% url 'accounts:userprofile' userid=user.id %}">
     <h2>更改用户信息</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -73,11 +64,10 @@
                     {% if form.image.errors %}
                         <div>
                             {% for error in form.image.errors %}
-                                <p style="color:red;">{{ error }}</p>
+                                <p class="error">{{ error }}</p>
                             {% endfor %}
                         </div>
                     {% endif %}
-                    <!-- <button type="button" class="reset-button" onclick="resetToDefault()">恢复至默认</button> -->
                 </div>
             </div>
         </div>
@@ -98,32 +88,11 @@
     </form>
 </div>
 
-    {% if success %}
-    <script>
-        console.log('修改成功');
-        showSuccessMessage();
-    </script>
-    {% endif %}
-
 {% endblock content%}
 
 
 {% block script %}
-    <script>
-        document.getElementById('id_image').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('current-image').src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    });
-
-    // 恢复默认头像
-    // function resetToDefault() {
-    //     document.getElementById('current-image').src = "{% static 'accounts/img/default.png' %}";
-    //     document.getElementById('id_image').value = '';  // 清空文件输入框
-    // }
-    // </script>
+<script src="{% static 'accounts/script/auth-success.js' %}"></script>
+<script src="{% static 'accounts/script/editprofile.js' %}"></script>
 {% endblock script %}
     

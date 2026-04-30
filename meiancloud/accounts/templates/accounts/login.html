@@ -7,22 +7,11 @@
 
 {% block otherstyles %}
     <link rel="stylesheet" href="{% static 'accounts/styles/login.css' %}">
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 {% endblock otherstyles %}
-
-
-{% block headscript %}
-<script>
-    function showSuccessMessage(){
-        alert('登录成功');  // 弹窗显示消息
-        window.location.href = "{% url 'core:index' %}";
-    }
-</script>
-{% endblock headscript %}
     
     
 {% block content %}
-    <div class="container" style="text-align: center;">
+    <div class="auth-page" data-success="{% if success %}true{% else %}false{% endif %}" data-success-message="登录成功" data-success-redirect="{% url 'core:index' %}">
         <div class="login-container">
             <h2>欢迎来到梅庵云迹！</h2>
             <p>请登录您的账户</p>
@@ -38,7 +27,7 @@
     
             <form method="post" class="login-form">
                 {% csrf_token %}
-                <div class="form-group">
+                <div class="auth-form-group">
                     <label for="id_username">用户名</label>
                     {{ form.username }}
                     {% if form.username.errors %}
@@ -49,7 +38,7 @@
                         </div>
                     {% endif %}
                 </div>
-                <div class="form-group">
+                <div class="auth-form-group">
                     <label for="id_password">密码</label>
                     {{ form.password }}
                     {% if form.password.errors %}
@@ -69,13 +58,8 @@
         </div>
     </div>
 
-    
-    {% if success %}
-        <script>
-            console.log('登录成功');
-            showSuccessMessage();
-        </script>
-    {% endif %}
-        
-
 {% endblock content %}
+
+{% block script %}
+<script src="{% static 'accounts/script/auth-success.js' %}"></script>
+{% endblock script %}

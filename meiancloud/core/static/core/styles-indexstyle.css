@@ -3,24 +3,28 @@
 .intro p.intro-text{
   text-indent: 4ex;
   margin: 15px;
-  /* border: 10px solid red; */
 }
 .intro h1{
   margin: 15px;
 }
 .intro {
-  margin-left: 220px;
-  margin-right: 220px;
+  box-sizing: border-box;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
-hr{
-  color: green;
+.section-divider {
+  border-top: 1px solid rgba(38, 59, 48, 0.25);
+  margin: 32px 0;
 }
 
 /*lxc 创始人布局 begin*/
 .intro-container {
-  display: flex; /* 使用Flexbox布局 */
-  justify-content: space-between; /* 将子元素分布在容器的两端 */
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
 }
 
 .intro-container.left{
@@ -31,37 +35,32 @@ hr{
 }
 
 .intro-text {
-  flex-grow: 1; /* 文本区域将填充剩余空间 */
+  flex: 1;
 }
 
-/* 移除了固定定位 */
 .fade-in-image {
-
-  opacity: 0; /* 初始透明度为0 */
-  /* position: fixed; 移除这一行 */
-  /* bottom: 20px; 移除这一行 */
-  /* right: 20px; 移除这一行 */
-  transition: opacity 1s ease-in-out; /* 透明度变化过渡效果 */
+  max-width: 100%;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
 }
 
 #id_csrimg{
-  width: 359px; /* 设置图片宽度，根据需要调整 */
-  height: 448px; /* 设置图片高度，根据需要调整 */
+  width: 359px;
+  height: auto;
 }
 
 #id_tedimg{
-  width: 578px; /* 设置图片宽度，根据需要调整 */
-  height: 448px; /* 设置图片高度，根据需要调整 */
+  width: 578px;
+  height: auto;
 }
 
 #id_zgqnimg{
-  width: 359px; /* 设置图片宽度，根据需要调整 */
-  height: 448px; /* 设置图片高度，根据需要调整 */
+  width: 359px;
+  height: auto;
 }
 
-/* 当图片进入视口时的样式 */
 .fade-in-image.visible {
-  opacity: 1; /* 透明度变为1 */
+  opacity: 1;
 }
 
 /*lxc 创始人布局 end*/
@@ -75,7 +74,42 @@ hr{
 .indexSwiper{
   --swiper-navigation-color: #fff;
   --swiper-pagination-color: #fff;
-  width: 600px; height: 400px;
+  width: min(600px, calc(100vw - 32px));
+  height: 400px;
 }
 
+@media (max-width: 900px) {
+  .intro {
+    padding: 0 16px;
+  }
 
+  .intro-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .intro-container .left,
+  .intro-container .right {
+    width: 100%;
+    text-align: center;
+  }
+
+  .intro-text {
+    text-align: left;
+  }
+
+  .intro p.intro-text {
+    text-indent: 2em;
+    line-height: 1.7;
+  }
+}
+
+@media (max-width: 520px) {
+  .indexSwiper {
+    height: 240px;
+  }
+
+  .image-container {
+    margin-top: 16px;
+  }
+}
