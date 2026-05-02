@@ -1,0 +1,124 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>{{ topic.title }} - 循迹梅庵</title>
+{% endblock title %}
+
+{% block otherstyles %}
+<link rel="stylesheet" href="{% static 'core/findmeian/styles.css' %}">
+<link rel="stylesheet" href="{% static 'core/Swiper/swiper-bundle.min.css' %}">
+{% endblock otherstyles %}
+
+{% block content %}
+<div class="topic-page">
+    <a class="back-link" href="{% url 'core:findmeian' %}">← 返回总述页</a>
+    <section class="topic-hero">
+        <div class="topic-hero-copy">
+            <p class="eyebrow">梅庵专题</p>
+            <h1>{{ topic.title }}</h1>
+            <p class="topic-subtitle">{{ topic.subtitle }}</p>
+            <div class="tag-row">
+                {% for tag in topic.tags %}
+                <span class="tag-pill">{{ tag }}</span>
+                {% endfor %}
+            </div>
+            <p class="topic-summary">{{ topic.summary }}</p>
+        </div>
+        <div class="topic-hero-image">
+            <img src="{% static topic.hero_image %}" alt="{{ topic.title }}">
+        </div>
+    </section>
+
+    <section class="topic-body">
+        <div class="topic-text">
+            {% for paragraph in topic.paragraphs %}
+            <p class="topic-paragraph">{{ paragraph|safe }}</p>
+            {% endfor %}
+
+            {% if topic.timeline %}
+            <div class="topic-extra-block">
+                <h2>时间线</h2>
+                <div class="timeline-list">
+                    {% for item in topic.timeline %}
+                    <div class="timeline-item">
+                        <strong>{{ item.year }}</strong>
+                        <span>{{ item.text }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if topic.sections %}
+            <div class="topic-extra-block">
+                <h2>展陈结构</h2>
+                <div class="section-list">
+                    {% for item in topic.sections %}
+                    <div class="section-item">
+                        <strong>{{ item.title }}</strong>
+                        <span>{{ item.text }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if topic.visit_steps %}
+            <div class="topic-extra-block">
+                <h2>参观步骤</h2>
+                <ol class="visit-steps">
+                    {% for step in topic.visit_steps %}
+                    <li>{{ step }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+            {% endif %}
+        </div>
+        <aside class="topic-sidebar">
+            <h3>知识要点</h3>
+            <div class="fact-list single-column">
+                {% for fact in topic.facts %}
+                <div class="fact-item">{{ fact }}</div>
+                {% endfor %}
+            </div>
+        </aside>
+    </section>
+
+    <section class="topic-gallery">
+        <h2>图文资料</h2>
+        <div class="topic-gallery-grid">
+            {% for image in image_items %}
+            <figure class="gallery-item">
+                <img src="{% static image.path %}" alt="{{ topic.title }} 图片 {{ forloop.counter }}">
+                <figcaption>{{ image.caption }}</figcaption>
+            </figure>
+            {% endfor %}
+        </div>
+    </section>
+
+    {% if topic.references %}
+    <section class="reference-box">
+        <h2>资料来源</h2>
+        <ul>
+            {% for reference in topic.references %}
+            <li>{{ reference }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+
+    <section class="related-topics">
+        <h2>相关推荐</h2>
+        <p class="related-intro">根据当前专题的标签、人物和事件关系，推荐继续阅读以下内容。</p>
+        <div class="recommendation-grid">
+            {% for item in related_topics %}
+            <a class="recommendation-card" href="{% url 'core:findmeian-topic' slug=item.topic.slug %}">
+                <strong>{{ item.topic.title }}</strong>
+                <span>{{ item.reason }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock content %}

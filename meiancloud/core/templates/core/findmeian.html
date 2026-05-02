@@ -7,85 +7,33 @@
 
 {% block otherstyles %}
 <link rel="stylesheet" href="{% static 'core/findmeian/styles.css' %}">
-<link rel="stylesheet" href="{% static 'core/Swiper/swiper-bundle.min.css' %}">
 {% endblock otherstyles %}
 
 {% block content %}
 <h1 class="page-title">循迹梅庵</h1>
 
-<div class="buttons">
-    <div class="line1">
-        <div class="left">
-            <div class="room14">
-                <button data-target="section1" class="button1">梅庵概况</button>
-                <button data-target="section4" class="button4">会议场景</button>
-            </div>
-            <div class="corridor">过道</div>
-        </div>
-        <div class="room56">
-            <button data-target="section6" class="button6">青年运动</button>
-            <button data-target="section5" class="button5">会议记录</button>
-        </div>
+<section class="overview-banner">
+    <div>
+        <p class="eyebrow">梅庵专题导览</p>
+        <h2>进入专题页浏览梅庵知识</h2>
+        <p class="overview-description">本页仅作为目录入口，点击下方卡片进入对应专题页查看长文和图片。</p>
     </div>
-
-    <div class="room23">
-        <button data-target="section2" class="button2">师道梅庵</button>
-        <button data-target="section3" class="button3">真理耀东南</button>
+    <div class="banner-image">
+        <img src="{% static 'core/findmeian/img/1/1.jpg' %}" alt="梅庵主图">
     </div>
-</div>
+</section>
 
-<div class="sections">
-    {% for section in findmeian_sections %}
-    <section id="{{ section.id }}">
-        <h2>{{ section.title }}</h2>
-        <div class="scroll-section">
-            <div class="image-container">
-                <div class="swiper mySwiper">
-                    <div class="swiper-wrapper">
-                        {% for image in section.images %}
-                        <div class="swiper-slide">
-                            <div class="swiper-zoom-container">
-                                <img src="{% static image %}" alt="{{ section.title }}展陈图片 {{ forloop.counter }}">
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-pagination"></div>
-                </div>
-            </div>
-            <div class="text-container">
-                {% for paragraph in section.paragraphs %}
-                <p class="text">{{ paragraph|safe }}</p>
-                {% endfor %}
-            </div>
+<section class="topic-nav-grid">
+    {% for topic in topics %}
+    <a class="topic-card" href="{% url 'core:findmeian-topic' slug=topic.slug %}">
+        <div class="topic-card-image">
+            <img src="{% static topic.hero_image %}" alt="{{ topic.title }}">
         </div>
-    </section>
+        <div class="topic-card-body">
+            <h3>{{ topic.title }}</h3>
+            <p>{{ topic.summary }}</p>
+        </div>
+    </a>
     {% endfor %}
-</div>
+</section>
 {% endblock content %}
-
-{% block script %}
-<script src="{% static 'core/findmeian/buttons.js' %}"></script>
-<script src="{% static 'core/findmeian/scroll.js' %}"></script>
-<script src="{% static 'core/Swiper/swiper-bundle.min.js' %}"></script>
-<script>
-    const swiper = new Swiper(".mySwiper", {
-        zoom: true,
-        loop: true,
-        autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-        },
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
-    });
-</script>
-{% endblock script %}

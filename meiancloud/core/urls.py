@@ -9,6 +9,7 @@ app_name = "core"
 urlpatterns = [
     path("", views.index, name="index"),
     path("findmeian/", views.findmeian, name="findmeian"),
+    path("findmeian/<slug:slug>/", views.findmeian_topic, name="findmeian-topic"),
     path("about/", views.about, name="about"),
     path("question/", views.question_view, name="question"),
     path("login_prompt/", views.login_prompt_view, name="login_prompt"),
