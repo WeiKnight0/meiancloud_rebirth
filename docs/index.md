@@ -15,8 +15,8 @@ System architecture, request flow, and application structure.
 ### [Data Models](architecture/data-models.md)
 Database schema: `UserProfile` and `Comment` models.
 
-### [Modules](modules/core.md)
-Detailed documentation for each Django app: core, accounts, community.
+### [Modules](modules/index.md)
+Single overview for the `core`, `accounts`, and `community` Django apps.
 
 ### [Guides](guides/environment-variables.md)
 Development guides including environment variables reference.

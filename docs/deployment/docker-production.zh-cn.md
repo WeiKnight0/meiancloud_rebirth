@@ -118,19 +118,6 @@ docker compose down -v
 
 ## 环境变量
 
-所有配置通过环境变量管理。完整列表见[环境变量参考](../guides/environment-variables.zh-cn.md)。
+所有配置通过环境变量管理。完整列表和默认值见[环境变量参考](../guides/environment-variables.zh-cn.md)。
 
-生产环境需在 `.env` 或部署平台中设置：
-
-```env
-DJANGO_SECRET_KEY=<random-secret>
-DJANGO_DEBUG=False
-DJANGO_ALLOWED_HOSTS=your-domain.com
-DB_ENGINE=django.db.backends.mysql
-DB_NAME=meianclouddata
-DB_USER=meianclouddata
-DB_PASSWORD=<secure-password>
-DB_HOST=mysql
-DB_PORT=3306
-ADMIN_PASSWORD=<secure-admin-password>
-```
+生产环境至少需要在 `.env` 或部署平台中设置密钥、允许访问的主机名、数据库连接和管理员密码。不要在生产环境复用开发示例密码。

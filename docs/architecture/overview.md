@@ -39,48 +39,18 @@ Nginx acts as a reverse proxy, handling static and media file serving directly w
 
 ## Application Structure
 
-### `core`
+The app-level details live in [Application Modules](../modules/index.md), and the complete route list lives in [URL Reference](../reference/urls.md). At a high level:
 
-The public-facing content app. Handles:
+| App | Responsibility |
+|---|---|
+| `core` | Public content pages, shared template context, error pages, SEO files |
+| `accounts` | Registration, login/logout, profiles, avatar upload, account lifecycle, admin bootstrap command |
+| `community` | Discussion page, comment APIs, threaded replies, moderation workflow |
+| `mysite` | Settings, root URL routing, WSGI/ASGI entry points |
 
-- **Homepage** (`/`) — Swiper image carousel, site introduction
-- **Tracing Meian** (`/findmeian/`) — Exhibition browsing
-- **About Us** (`/about/`) — Team and project background
-- **FAQ** (`/question/`) — Common questions and answers
-- **User Agreement** (`/agreement/`) — Terms of service
-- **Login Prompt** (`/login_prompt/`) — Redirect page for unauthenticated users
+## Project Configuration
 
-Also provides shared template context via `default_context()` which injects the current user, profile, and nickname into every template.
-
-### `accounts`
-
-User identity and profile management:
-
-- **Registration** (`/register/`) — Creates `User` + `UserProfile`
-- **Login** (`/login/`) — Session-based authentication
-- **Logout** (`/logout/`) — POST-only session termination
-- **Profile** (`/profile/<userid>/`) — View profile (private fields visible to owner only)
-- **Edit Profile** (`/editprofile/<userid>/`) — Update nickname, gender, birthday, avatar, signature
-- **Change Password** (`/changepsw/<userid>/`) — Requires old password verification
-- **Delete Account** (`/delete_account/`) — POST with password re-verification
-
-Includes `ensure_admin_user` management command for auto-creating/updating admin accounts from environment variables.
-
-### `community`
-
-Discussion and moderation system:
-
-- **Discussion Page** (`/freetotalk/`) — Public comment list with pagination
-- **Comment API** (`/api/comments/`) — POST to create top-level comments
-- **Reply API** (`/api/comments/<id>/replies/`) — POST to create replies
-- **Delete API** (`/api/comments/<id>/`) — DELETE to remove own comments
-- **Moderation** (`/comment-management/`) — Superuser-only approve/delete interface
-
-Comments go through an approval workflow (`is_checked` field) before becoming publicly visible.
-
-### `mysite`
-
-Project-level configuration:
+`mysite` contains project-level configuration:
 
 - `settings.py` — Django settings, environment variable loading
 - `urls.py` — Root URL router, mounts all app URLs

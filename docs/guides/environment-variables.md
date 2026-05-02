@@ -4,6 +4,8 @@
 
 All configuration is managed through environment variables. In Docker Compose, these are injected via the `.env` file or compose environment settings.
 
+Values shown as defaults are for local development only unless explicitly stated. Set unique secrets and passwords for production.
+
 ## Required Variables
 
 These must be set or the application will fail to start.

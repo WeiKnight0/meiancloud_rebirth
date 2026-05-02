@@ -77,15 +77,7 @@
 
 ## Git
 
-### 提交信息
-
-- 使用祈使语气："Add feature" 而非 "Added feature"
-- 主题行不超过 72 字符
-- 相关时引用 Issue：`Fix #123`
-
-### 分支命名
-
-分支命名规范见[贡献指南](guide.zh-cn.md)。
+分支命名、提交信息和 PR 流程规范见[贡献指南](guide.zh-cn.md)。
 
 ## 注释
 

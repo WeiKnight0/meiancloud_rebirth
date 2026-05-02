@@ -15,8 +15,8 @@
 ### [数据模型](architecture/data-models.zh-cn.md)
 数据库设计：`UserProfile` 与 `Comment` 模型。
 
-### [模块详解](modules/core.zh-cn.md)
-各 Django 应用的详细文档：core、accounts、community。
+### [模块总览](modules/index.zh-cn.md)
+`core`、`accounts`、`community` 三个 Django 应用的统一说明。
 
 ### [开发指南](guides/environment-variables.zh-cn.md)
 开发指南，含环境变量完整参考。

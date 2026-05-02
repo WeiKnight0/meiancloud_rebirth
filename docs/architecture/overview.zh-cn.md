@@ -39,48 +39,18 @@ Nginx 作为反向代理，直接处理静态文件和媒体文件请求，动�
 
 ## 应用结构
 
-### `core`
+应用层细节见[应用模块](../modules/index.zh-cn.md)，完整路由清单见[URL 参考](../reference/urls.zh-cn.md)。高层职责如下：
 
-公共内容页面应用，负责：
+| 应用 | 职责 |
+|---|---|
+| `core` | 公共内容页面、共享模板上下文、错误页、SEO 文件 |
+| `accounts` | 注册、登录/登出、资料、头像上传、账号生命周期、管理员初始化命令 |
+| `community` | 讨论页、评论 API、层级回复、审核流程 |
+| `mysite` | 配置、根路由、WSGI/ASGI 入口 |
 
-- **首页** (`/`) — Swiper 图片轮播、网站介绍
-- **循迹梅庵** (`/findmeian/`) — 展陈浏览
-- **关于我们** (`/about/`) — 团队与项目背景
-- **常见问题** (`/question/`) — 高频问题解答
-- **用户协议** (`/agreement/`) — 使用条款
-- **登录提示** (`/login_prompt/`) — 未登录用户的跳转页
+## 项目配置
 
-同时通过 `default_context()` 提供共享模板上下文，将当前用户、用户资料和昵称注入到每个模板中。
-
-### `accounts`
-
-用户身份与资料管理：
-
-- **注册** (`/register/`) — 同时创建 `User` 和 `UserProfile`
-- **登录** (`/login/`) — 基于 Session 的认证
-- **登出** (`/logout/`) — 仅限 POST 的会话终止
-- **个人主页** (`/profile/<userid>/`) — 查看资料（私密字段仅本人可见）
-- **编辑资料** (`/editprofile/<userid>/`) — 修改昵称、性别、生日、头像、签名
-- **修改密码** (`/changepsw/<userid>/`) — 需验证旧密码
-- **注销账号** (`/delete_account/`) — POST 并重新输入密码确认
-
-包含 `ensure_admin_user` 管理命令，可从环境变量自动创建或更新管理员账号。
-
-### `community`
-
-讨论与审核系统：
-
-- **讨论页** (`/freetotalk/`) — 公开评论列表，支持分页
-- **评论接口** (`/api/comments/`) — POST 创建顶级评论
-- **回复接口** (`/api/comments/<id>/replies/`) — POST 创建回复
-- **删除接口** (`/api/comments/<id>/`) — DELETE 删除自己的评论
-- **审核管理** (`/comment-management/`) — 超级管理员审核/删除
-
-评论采用审核制（`is_checked` 字段），发布后需管理员审核才对外可见。
-
-### `mysite`
-
-项目级配置：
+`mysite` 包含项目级配置：
 
 - `settings.py` — Django 配置、环境变量加载
 - `urls.py` — 根路由，挂载所有 app 路由

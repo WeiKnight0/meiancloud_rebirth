@@ -16,22 +16,7 @@ cd meiancloud_rebirth
 
 ### 2. 搭建开发环境
 
-```bash
-cd meiancloud
-cp .env.example .env
-pip3 install -r requirements.txt
-python3 manage.py migrate
-python3 manage.py ensure_admin_user
-python3 manage.py runserver
-```
-
-或使用 Docker：
-
-```bash
-cd meiancloud
-cp .env.example .env
-docker compose up --build
-```
+使用[快速开始](../getting-started/quickstart.zh-cn.md)中的标准步骤。该文档同时覆盖本地 Python 环境和 Docker 启动方式。
 
 ### 3. 创建分支
 
@@ -63,7 +48,7 @@ git checkout -b feature/your-feature-name
 
 ### 提交信息
 
-使用祈使语气：
+使用祈使语气，主题行不超过 72 字符：
 
 ```
 Add comment search feature

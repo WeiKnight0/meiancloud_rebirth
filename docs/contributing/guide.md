@@ -16,22 +16,7 @@ cd meiancloud_rebirth
 
 ### 2. Set Up Development Environment
 
-```bash
-cd meiancloud
-cp .env.example .env
-pip3 install -r requirements.txt
-python3 manage.py migrate
-python3 manage.py ensure_admin_user
-python3 manage.py runserver
-```
-
-Or with Docker:
-
-```bash
-cd meiancloud
-cp .env.example .env
-docker compose up --build
-```
+Use the canonical setup steps in [Quickstart](../getting-started/quickstart.md). It covers both local Python setup and Docker startup.
 
 ### 3. Create a Branch
 
@@ -63,7 +48,7 @@ git checkout -b feature/your-feature-name
 
 ### Commit Messages
 
-Use imperative mood:
+Use imperative mood and keep the subject line under 72 characters:
 
 ```
 Add comment search feature

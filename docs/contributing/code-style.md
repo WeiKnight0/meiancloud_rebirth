@@ -77,15 +77,7 @@
 
 ## Git
 
-### Commit Messages
-
-- Use imperative mood: "Add feature" not "Added feature"
-- Keep subject line under 72 characters
-- Reference issues when relevant: `Fix #123`
-
-### Branch Naming
-
-See [Contributing Guide](guide.md) for branch naming conventions.
+See [Contributing Guide](guide.md) for branch naming, commit message, and PR process conventions.
 
 ## Comments
 

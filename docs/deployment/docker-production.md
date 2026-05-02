@@ -118,19 +118,6 @@ docker compose down -v
 
 ## Environment Variables
 
-All configuration is through environment variables. See [Environment Variables Reference](../guides/environment-variables.md) for the complete list.
+All configuration is through environment variables. See [Environment Variables Reference](../guides/environment-variables.md) for the complete list and defaults.
 
-In production, set these in `.env` or your deployment platform:
-
-```env
-DJANGO_SECRET_KEY=<random-secret>
-DJANGO_DEBUG=False
-DJANGO_ALLOWED_HOSTS=your-domain.com
-DB_ENGINE=django.db.backends.mysql
-DB_NAME=meianclouddata
-DB_USER=meianclouddata
-DB_PASSWORD=<secure-password>
-DB_HOST=mysql
-DB_PORT=3306
-ADMIN_PASSWORD=<secure-admin-password>
-```
+For production, set at least the secret key, allowed hosts, database connection, and admin password in `.env` or your deployment platform. Never reuse development example passwords in production.
